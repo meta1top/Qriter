@@ -1,0 +1,11 @@
+#!/bin/sh
+set -e
+
+echo "[pre-commit] running biome (incremental via lint-staged)..."
+pnpm exec lint-staged
+
+echo "[pre-commit] running 6 static fences (parallel)..."
+pnpm check:parallel
+
+echo "[pre-commit] enforcing i18n key alignment..."
+pnpm sync:locales -- --check

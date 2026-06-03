@@ -1,0 +1,29 @@
+{
+  "common": {
+    "appTitle": "Qriter Writing Platform",
+    "appDescription": "Agent-powered writing platform",
+    "loading": "Loading…"
+  },
+  "home": {
+    "tagline": "Power your writing with agents",
+    "goToLogin": "Go to login",
+    "getStarted": "Get started"
+  },
+  "auth": {
+    "login": "Login",
+    "loginTitle": "Sign in",
+    "loginSubtitle": "Sign in with your email and password",
+    "email": "Email",
+    "emailPlaceholder": "you@example.com",
+    "password": "Password",
+    "submit": "Sign in",
+    "submitting": "Signing in…",
+    "loginFailed": "Login failed, please check your email and password"
+  },
+  "validation": {
+    "required": "This field is required",
+    "invalidEmail": "Invalid email address",
+    "passwordTooShort": "Password must be at least 8 characters",
+    "stringTooLong": "Content is too long"
+  }
+}

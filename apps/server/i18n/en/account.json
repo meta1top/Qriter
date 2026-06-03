@@ -1,0 +1,5 @@
+{
+  "emailAlreadyExists": "Email is already registered",
+  "invalidCredentials": "Invalid email or password",
+  "notFound": "Account not found"
+}

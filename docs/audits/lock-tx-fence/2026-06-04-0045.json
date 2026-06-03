@@ -1,0 +1,10 @@
+{
+  "generatedAt": "2026-06-03T16:45:45.995Z",
+  "paths": ["libs", "apps"],
+  "fileCount": 118,
+  "filterTypes": null,
+  "strict": true,
+  "lockedMethodCount": 0,
+  "total": 0,
+  "issues": []
+}

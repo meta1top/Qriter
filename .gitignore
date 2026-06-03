@@ -1,0 +1,56 @@
+# dependencies
+node_modules/
+
+# build
+dist/
+.next/
+out/
+*.tsbuildinfo
+# Next.js 自动生成，随版本/dev 运行重写，不纳入版本控制
+next-env.d.ts
+
+# turbo
+.turbo/
+
+# pnpm
+.pnpm-store/
+
+# env
+.env
+.env.local
+.env.*.local
+.env.development
+.env.production
+!.env.*.example
+
+# editor
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+*.swp
+*.swo
+
+# claude code 运行时
+.claude/scheduled_tasks.lock
+
+# os
+.DS_Store
+Thumbs.db
+
+# worktrees
+.worktrees/
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# test
+coverage/
+
+# qriter 运行时数据目录
+.qriter/
+
+# 初始化期间的临时测绘笔记
+.planning/

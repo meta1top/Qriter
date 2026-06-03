@@ -1,0 +1,65 @@
+{
+  "name": "qriter",
+  "private": true,
+  "scripts": {
+    "build": "turbo run build",
+    "build:server": "turbo run build --filter=@qriter/server",
+    "build:web": "turbo run build --filter=@qriter/web",
+    "dev": "turbo run dev",
+    "dev:server": "turbo run dev --filter=@qriter/server...",
+    "dev:web": "turbo run dev --filter=@qriter/web...",
+    "dev:db:up": "docker compose -f infra/dev/docker-compose.dev.yml up -d",
+    "dev:db:down": "docker compose -f infra/dev/docker-compose.dev.yml down",
+    "dev:db:reset": "docker compose -f infra/dev/docker-compose.dev.yml down -v && docker compose -f infra/dev/docker-compose.dev.yml up -d",
+    "dev:db:logs": "docker compose -f infra/dev/docker-compose.dev.yml logs -f postgres",
+    "start:server": "pnpm --filter @qriter/server start",
+    "lint": "biome lint .",
+    "format": "biome format --write .",
+    "check:format": "biome check --write .",
+    "check:tx": "tsx scripts/check-transactional.ts",
+    "check:naming": "tsx scripts/check-method-naming.ts",
+    "check:lock-tx": "tsx scripts/check-lock-tx.ts",
+    "check:repo": "tsx scripts/check-repo-access.ts",
+    "check:dead": "tsx scripts/check-dead-exports.ts",
+    "check:error-code": "tsx scripts/check-error-code.ts",
+    "check": "pnpm check:tx && pnpm check:naming && pnpm check:lock-tx && pnpm check:repo && pnpm check:dead && pnpm check:error-code",
+    "check:strict": "pnpm check:tx -- --strict && pnpm check:naming -- --strict && pnpm check:lock-tx -- --strict && pnpm check:repo -- --strict && pnpm check:dead -- --strict && pnpm check:error-code -- --strict",
+    "check:parallel": "pnpm run \"/^check:(tx|naming|lock-tx|repo|dead|error-code)$/\"",
+    "sync:locales": "tsx scripts/sync-locales.ts",
+    "migration": "pnpm --filter @qriter/server migration",
+    "migration:archive": "pnpm --filter @qriter/server migration:archive",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:cov": "jest --coverage",
+    "typecheck": "turbo run typecheck",
+    "clean": "turbo run clean && rm -rf node_modules",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.4.14",
+    "@types/jest": "^30.0.0",
+    "@types/supertest": "^7.2.0",
+    "husky": "^9.1.7",
+    "jest": "^30.4.2",
+    "lint-staged": "^17.0.4",
+    "supertest": "^7.2.2",
+    "ts-jest": "^29.4.9",
+    "ts-morph": "^28.0.0",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.21.0",
+    "turbo": "^2.9.14",
+    "typeorm": "^0.3.28",
+    "typeorm-naming-strategies": "^4.1.0",
+    "typescript": "^5"
+  },
+  "packageManager": "pnpm@11.4.0",
+  "engines": {
+    "node": ">=22",
+    "pnpm": ">=11"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx,json}": [
+      "biome check --write --no-errors-on-unmatched"
+    ]
+  }
+}

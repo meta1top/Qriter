@@ -1,0 +1,5 @@
+{
+  "emailAlreadyExists": "邮箱已被注册",
+  "invalidCredentials": "邮箱或密码错误",
+  "notFound": "账号不存在"
+}

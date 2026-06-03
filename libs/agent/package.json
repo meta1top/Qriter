@@ -1,0 +1,36 @@
+{
+  "name": "@qriter/agent",
+  "version": "0.0.1",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc --project tsconfig.json",
+    "dev": "tsc --project tsconfig.json --watch",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --project tsconfig.json --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@qriter/types": "workspace:*",
+    "@langchain/anthropic": "0.3.34",
+    "@langchain/core": "^0.3",
+    "@langchain/langgraph": "^0.2",
+    "@langchain/langgraph-checkpoint": "~0.0.18",
+    "@langchain/langgraph-checkpoint-postgres": "^0.0.5",
+    "@langchain/openai": "0.6.17",
+    "@nestjs/common": "^11.1.19",
+    "@nestjs/core": "^11.1.19",
+    "@nestjs/event-emitter": "^3.1.0",
+    "langchain": "^0.3.37",
+    "pg": "^8.20.0",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@nestjs/testing": "^11.1.19",
+    "@types/node": "^22",
+    "@types/pg": "^8",
+    "tsx": "^4.21.0",
+    "vitest": "^4.1.5"
+  }
+}

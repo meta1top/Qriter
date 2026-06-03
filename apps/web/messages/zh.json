@@ -1,0 +1,29 @@
+{
+  "common": {
+    "appTitle": "Qriter 写作平台",
+    "appDescription": "基于 Agent 的写作平台",
+    "loading": "加载中…"
+  },
+  "home": {
+    "tagline": "用 Agent 驱动你的写作",
+    "goToLogin": "前往登录",
+    "getStarted": "开始使用"
+  },
+  "auth": {
+    "login": "登录",
+    "loginTitle": "登录账号",
+    "loginSubtitle": "使用邮箱与密码登录",
+    "email": "邮箱",
+    "emailPlaceholder": "you@example.com",
+    "password": "密码",
+    "submit": "登录",
+    "submitting": "登录中…",
+    "loginFailed": "登录失败，请检查邮箱与密码"
+  },
+  "validation": {
+    "required": "此项为必填",
+    "invalidEmail": "邮箱格式不正确",
+    "passwordTooShort": "密码至少 8 位",
+    "stringTooLong": "内容过长"
+  }
+}

@@ -1,0 +1,5 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "@qriter/design/src/styles/globals.css";
+
+@source "../../../../packages/design/src";

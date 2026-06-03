@@ -1,0 +1,33 @@
+packages:
+  - apps/*
+  - libs/*
+  - packages/*
+
+# pnpm 11 起 verify-deps-before-run 等设置从 .npmrc 迁到这里（.npmrc 里的同名项已失效）。
+# 关掉「跑命令前校验依赖、失配就自动 install」，避免非 TTY 构建链路里误判中断。
+verifyDepsBeforeRun: false
+
+overrides:
+  '@types/node': ^22
+  # 统一 LangGraph checkpoint 版本：postgres checkpointer 0.0.x 需要 ~0.0.15，
+  # langgraph 0.2.x 依赖 ~0.0.17；锁到 0.0.18 同时满足两者，避免树里出现多版本。
+  '@langchain/langgraph-checkpoint': ~0.0.18
+
+peerDependencyRules:
+  ignoreMissing:
+    - dotenv
+  allowedVersions:
+    "@nestjs/core": "11"
+    "@nestjs/common": "11"
+    "@nestjs/typeorm": "11"
+    "reflect-metadata": "*"
+
+allowBuilds:
+  '@nestjs/core': true
+  '@parcel/watcher': true
+  '@scarf/scarf': true
+  '@swc/core': true
+  bcrypt: true
+  esbuild: true
+  sharp: true
+  unrs-resolver: true

@@ -1,0 +1,32 @@
+{
+  "name": "@qriter/account",
+  "version": "0.0.1",
+  "private": true,
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "tsc --project tsconfig.json",
+    "dev": "tsc --project tsconfig.json --watch",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --project tsconfig.json --noEmit",
+    "test": "jest --config ../../jest.config.ts --roots libs/account"
+  },
+  "dependencies": {
+    "@qriter/shared": "workspace:*",
+    "@qriter/types": "workspace:*",
+    "bcrypt": "^6.0.0",
+    "nanoid": "^5"
+  },
+  "peerDependencies": {
+    "@nestjs/common": "^11",
+    "@nestjs/core": "^11",
+    "@nestjs/typeorm": "^11",
+    "nestjs-i18n": "^10",
+    "reflect-metadata": "*",
+    "typeorm": "^0.3"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "@types/node": "^22"
+  }
+}
