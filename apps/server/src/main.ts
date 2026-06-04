@@ -1,6 +1,7 @@
 import {
   ErrorsFilter,
   I18nZodValidationPipe,
+  loadAppConfig,
   ResponseInterceptor,
   traceIdMiddleware,
 } from "@qriter/shared";
@@ -10,6 +11,14 @@ import { AppModule } from "./app.module";
 import { setupSwagger } from "./app.swagger";
 
 async function bootstrap() {
+  // 引导式配置：Nest 起来前先把 YAML / Nacos 的配置写进 process.env，
+  // 供下面 AppModule 的 ConfigModule + EnvSchema 照常校验。
+  await loadAppConfig({
+    cwd: process.cwd(),
+    envFiles: [".env.development", ".env"],
+    yamlFiles: ["config/application.yml", "config/application.local.yml"],
+  });
+
   const app = await NestFactory.create(AppModule);
 
   // 标准全局链路（顺序：trace → pipe → interceptor → filter）
