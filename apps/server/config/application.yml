@@ -1,0 +1,13 @@
+# qriter server 本地开发配置（提交，含 localhost 默认值，pnpm dev 开箱即用）。
+# 部署环境在 .env 配置 NACOS_SERVER_ADDR 后，本文件不会被读取（loader 走 Nacos 分支）。
+# 个人覆盖：把要改的项写进 config/application.local.yml（已 gitignore）。
+node_env: development
+port: 3000
+database:
+  url: postgresql://qriter:qriter@localhost:5433/qriter
+jwt:
+  secret: qriter-dev-secret-change-in-prod-min-16
+  expires: 7d
+# Redis：留空走 memory 兜底；本地起 redis（pnpm dev:db:up，端口 6380）后再启用：
+# redis:
+#   url: redis://localhost:6380
