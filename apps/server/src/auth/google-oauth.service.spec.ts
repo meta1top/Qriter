@@ -57,8 +57,7 @@ describe("GoogleOAuthService.exchangeCode", () => {
   it("成功换取并归一化 profile", async () => {
     jest
       .spyOn(OAuth2Client.prototype, "getToken")
-      // @ts-expect-error 只需要 id_token 字段
-      .mockResolvedValue({ tokens: { id_token: "idtok" } });
+      .mockResolvedValue({ tokens: { id_token: "idtok" } } as never);
     jest.spyOn(OAuth2Client.prototype, "verifyIdToken").mockResolvedValue({
       getPayload: () => ({
         sub: "g-sub-1",
@@ -66,7 +65,7 @@ describe("GoogleOAuthService.exchangeCode", () => {
         email_verified: true,
         name: "Alice",
       }),
-    } as unknown as Awaited<ReturnType<OAuth2Client["verifyIdToken"]>>);
+    } as never);
 
     const profile = await build().exchangeCode("code-xyz");
     expect(profile).toEqual({
@@ -80,7 +79,7 @@ describe("GoogleOAuthService.exchangeCode", () => {
   it("换取失败抛 GOOGLE_OAUTH_FAILED", async () => {
     jest
       .spyOn(OAuth2Client.prototype, "getToken")
-      .mockRejectedValue(new Error("invalid_grant"));
+      .mockRejectedValue(new Error("invalid_grant") as never);
     await expect(build().exchangeCode("bad")).rejects.toMatchObject({
       errorCode: AccountErrorCode.GOOGLE_OAUTH_FAILED,
     });
