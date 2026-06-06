@@ -2,6 +2,7 @@ export {
   type Account,
   AccountSchema,
   type AuthResponse,
+  AuthResponseSchema,
   type LoginInput,
   LoginSchema,
   type RegisterInput,

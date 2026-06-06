@@ -42,9 +42,11 @@ export type Account = z.infer<typeof AccountSchema>;
 
 /**
  * 登录 / 注册成功响应：JWT 访问令牌 + 当前账号公开档案。
- * 前端据此写入 auth store 并落 token。
+ * 前端据此写入 auth store 并落 token；后端用它生成 Swagger 响应 DTO。
  */
-export interface AuthResponse {
-  accessToken: string;
-  user: Account;
-}
+export const AuthResponseSchema = z.object({
+  accessToken: z.string().describe("JWT 访问令牌，放 Authorization: Bearer"),
+  user: AccountSchema,
+});
+
+export type AuthResponse = z.infer<typeof AuthResponseSchema>;

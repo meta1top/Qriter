@@ -38,12 +38,18 @@ async function bootstrap() {
 
   // dev 模式挂载 Swagger UI（/api/docs）；生产不挂载避免泄漏内部 API 结构。
   // 运行模式取自 NODE_ENV（部署环境身份），不取自 Nacos 配置。
-  if (process.env.NODE_ENV !== "production") {
+  const swaggerEnabled = process.env.NODE_ENV !== "production";
+  if (swaggerEnabled) {
     setupSwagger(app);
   }
 
   await app.listen(config.port);
-  console.log(`qriter server running on http://localhost:${config.port}`);
+  const base = `http://localhost:${config.port}`;
+  console.log(`qriter server running on ${base}`);
+  if (swaggerEnabled) {
+    console.log(`Swagger UI:    ${base}/api/docs`);
+    console.log(`OpenAPI JSON:  ${base}/api/docs-json`);
+  }
 }
 
 bootstrap();

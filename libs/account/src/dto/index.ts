@@ -1,5 +1,6 @@
 import { createI18nZodDto } from "@qriter/shared";
 import {
+  AuthResponseSchema,
   type LoginInput,
   LoginSchema,
   type RegisterInput,
@@ -24,3 +25,9 @@ export interface RegisterDto extends RegisterInput {}
 // biome-ignore lint/suspicious/noUnsafeDeclarationMerging: intentional class+interface merge to expose zod-inferred fields
 export class LoginDto extends createI18nZodDto(LoginSchema) {}
 export interface LoginDto extends LoginInput {}
+
+/**
+ * 响应 DTO —— 仅供 Swagger 声明 @ApiOkResponse / @ApiCreatedResponse 的 type
+ * （登录 / 注册成功的 data 形态：accessToken + 账号档案）。不做请求校验，无需 interface 合并。
+ */
+export class AuthResponseDto extends createI18nZodDto(AuthResponseSchema) {}

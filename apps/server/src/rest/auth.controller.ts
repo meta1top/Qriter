@@ -1,5 +1,6 @@
 import {
   type Account,
+  AuthResponseDto,
   LoginDto,
   RegisterDto,
   UserService,
@@ -7,7 +8,13 @@ import {
 import type { AuthResponse } from "@qriter/types";
 import { Body, Controller, HttpCode, Post } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
-import { ApiOperation, ApiTags } from "@nestjs/swagger";
+import {
+  ApiBody,
+  ApiCreatedResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from "@nestjs/swagger";
 import { Throttle } from "@nestjs/throttler";
 
 import { Public } from "../auth/public.decorator";
@@ -28,6 +35,11 @@ export class AuthController {
   // 限流：同源 IP 1 分钟内最多 5 次注册（防爬虫批量注册账号）
   @Throttle({ default: { limit: 5, ttl: 60_000 } })
   @ApiOperation({ summary: "注册新账号并返回 JWT" })
+  @ApiBody({ type: RegisterDto })
+  @ApiCreatedResponse({
+    description: "注册成功，envelope.data 为 accessToken + 账号公开档案",
+    type: AuthResponseDto,
+  })
   @Post("register")
   @HttpCode(201)
   async register(@Body() dto: RegisterDto): Promise<AuthResponse> {
@@ -39,6 +51,11 @@ export class AuthController {
   // 限流：同源 IP 1 分钟内最多 10 次登录（防密码爆破）
   @Throttle({ default: { limit: 10, ttl: 60_000 } })
   @ApiOperation({ summary: "登录并返回 JWT" })
+  @ApiBody({ type: LoginDto })
+  @ApiOkResponse({
+    description: "登录成功，envelope.data 为 accessToken + 账号公开档案",
+    type: AuthResponseDto,
+  })
   @Post("login")
   @HttpCode(200)
   async login(@Body() dto: LoginDto): Promise<AuthResponse> {

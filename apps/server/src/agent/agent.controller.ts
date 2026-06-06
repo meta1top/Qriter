@@ -1,7 +1,13 @@
 import { createI18nZodDto } from "@qriter/shared";
 import { AgentRunRequestSchema } from "@qriter/types";
 import { Body, Controller, HttpCode, Post } from "@nestjs/common";
-import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
+import {
+  ApiAcceptedResponse,
+  ApiBearerAuth,
+  ApiBody,
+  ApiOperation,
+  ApiTags,
+} from "@nestjs/swagger";
 
 import {
   CurrentUser,
@@ -33,6 +39,16 @@ export class AgentController {
 
   @ApiOperation({
     summary: "发起一次 agent run（结果经 WS /ws/session 流式回推）",
+  })
+  @ApiBody({ type: AgentRunDto })
+  @ApiAcceptedResponse({
+    description:
+      "已受理，envelope.data 为 { sessionId }；run 结果经 WS 流式回推",
+    schema: {
+      type: "object",
+      properties: { sessionId: { type: "string", format: "uuid" } },
+      required: ["sessionId"],
+    },
   })
   @Post("run")
   @HttpCode(202)
