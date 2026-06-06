@@ -30,6 +30,8 @@ export class AddAccountIdentity1780776290465 implements MigrationInterface {
 
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`DROP TABLE IF EXISTS "account_identity"`);
+    // 警告：若库中已存在社交账号（password_hash IS NULL），下面的 SET NOT NULL 会失败。
+    // 回滚前需先处理这些行（迁移到密码账号或删除），否则本次 down 不可逆。
     await queryRunner.query(
       `ALTER TABLE "account" ALTER COLUMN "password_hash" SET NOT NULL`,
     );
