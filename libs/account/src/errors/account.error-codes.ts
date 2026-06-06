@@ -34,4 +34,25 @@ export const AccountErrorCode = defineErrorCode({
     message: "account.notFound",
     httpStatus: 404,
   },
+
+  /** Google 邮箱未验证（email_verified=false），不允许自动关联到已有账号。 */
+  GOOGLE_EMAIL_UNVERIFIED: {
+    code: 1003,
+    message: "account.googleEmailUnverified",
+    httpStatus: 409,
+  },
+
+  /** Google 换 code / 验 id_token 失败（或 oauth.google 未配置）。 */
+  GOOGLE_OAUTH_FAILED: {
+    code: 1004,
+    message: "account.googleOauthFailed",
+    httpStatus: 401,
+  },
+
+  /** OAuth state 验签失败（过期 / 篡改 / 标记不符）。 */
+  GOOGLE_STATE_INVALID: {
+    code: 1005,
+    message: "account.googleStateInvalid",
+    httpStatus: 400,
+  },
 });

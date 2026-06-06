@@ -1,5 +1,8 @@
 {
   "emailAlreadyExists": "Email is already registered",
   "invalidCredentials": "Invalid email or password",
-  "notFound": "Account not found"
+  "notFound": "Account not found",
+  "googleEmailUnverified": "Google email not verified; cannot link to existing account",
+  "googleOauthFailed": "Google sign-in failed, please try again",
+  "googleStateInvalid": "Sign-in request expired or invalid, please try again"
 }

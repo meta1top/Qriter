@@ -1,5 +1,8 @@
 {
   "emailAlreadyExists": "邮箱已被注册",
   "invalidCredentials": "邮箱或密码错误",
-  "notFound": "账号不存在"
+  "notFound": "账号不存在",
+  "googleEmailUnverified": "Google 邮箱未验证，无法关联到已有账号",
+  "googleOauthFailed": "Google 登录失败，请重试",
+  "googleStateInvalid": "登录请求已过期或无效，请重试"
 }
