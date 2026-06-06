@@ -1,7 +1,9 @@
 import { TxTypeOrmModule } from "@qriter/common";
 import { Module } from "@nestjs/common";
 
+import { AccountIdentity } from "./entities/account-identity.entity";
 import { Account } from "./entities/account.entity";
+import { AccountIdentityService } from "./services/account-identity.service";
 import { UserService } from "./services/user.service";
 
 /**
@@ -19,8 +21,8 @@ import { UserService } from "./services/user.service";
  * 唯一注册（`global: true`），否则 `@WithLock` 装饰器可能拿到不同的 LockProvider 实例。
  */
 @Module({
-  imports: [TxTypeOrmModule.forFeature([Account])],
-  providers: [UserService],
-  exports: [UserService],
+  imports: [TxTypeOrmModule.forFeature([Account, AccountIdentity])],
+  providers: [UserService, AccountIdentityService],
+  exports: [UserService, AccountIdentityService],
 })
 export class AccountModule {}
