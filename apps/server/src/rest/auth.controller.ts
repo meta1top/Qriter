@@ -1,12 +1,25 @@
 import {
   type Account,
+  AccountDto,
+  AccountErrorCode,
+  AccountIdentityService,
   AuthResponseDto,
+  GoogleCodeDto,
   LoginDto,
   RegisterDto,
   UserService,
 } from "@qriter/account";
-import type { AuthResponse } from "@qriter/types";
-import { Body, Controller, HttpCode, Post } from "@nestjs/common";
+import { SkipResponseEnvelope } from "@qriter/common";
+import { AppError } from "@qriter/shared";
+import type { Account as AccountProfile, AuthResponse } from "@qriter/types";
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  Post,
+  Redirect,
+} from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import {
   ApiBody,
@@ -17,6 +30,11 @@ import {
 } from "@nestjs/swagger";
 import { Throttle } from "@nestjs/throttler";
 
+import {
+  CurrentUser,
+  type CurrentUserPayload,
+} from "../auth/current-user.decorator";
+import { GoogleOAuthService } from "../auth/google-oauth.service";
 import { Public } from "../auth/public.decorator";
 
 /**
@@ -29,6 +47,8 @@ export class AuthController {
   constructor(
     private readonly users: UserService,
     private readonly jwt: JwtService,
+    private readonly identities: AccountIdentityService,
+    private readonly googleOAuth: GoogleOAuthService,
   ) {}
 
   @Public()
@@ -61,6 +81,59 @@ export class AuthController {
   async login(@Body() dto: LoginDto): Promise<AuthResponse> {
     const user = await this.users.validateCredentials(dto);
     return this.signResponse(user);
+  }
+
+  @Public()
+  @SkipResponseEnvelope()
+  @ApiOperation({ summary: "重定向到 Google 同意页" })
+  @Get("google")
+  @Redirect()
+  googleStart(): { url: string } {
+    return { url: this.googleOAuth.buildConsentUrl() };
+  }
+
+  @Public()
+  @Throttle({ default: { limit: 10, ttl: 60_000 } })
+  @ApiOperation({ summary: "用 Google 授权码换取 JWT" })
+  @ApiBody({ type: GoogleCodeDto })
+  @ApiOkResponse({
+    description: "登录成功，data 为 accessToken + 档案",
+    type: AuthResponseDto,
+  })
+  @Post("google")
+  @HttpCode(200)
+  async googleCallback(@Body() dto: GoogleCodeDto): Promise<AuthResponse> {
+    this.googleOAuth.verifyState(dto.state);
+    const profile = await this.googleOAuth.exchangeCode(dto.code);
+    const account = await this.identities.findOrCreateByGoogle({
+      provider: "google",
+      sub: profile.sub,
+      email: profile.email,
+      emailVerified: profile.emailVerified,
+      name: profile.name,
+    });
+    return this.signResponse(account);
+  }
+
+  @ApiOperation({ summary: "当前登录账号公开档案" })
+  @ApiOkResponse({ description: "当前账号档案", type: AccountDto })
+  @Get("profile")
+  async profile(
+    @CurrentUser() user: CurrentUserPayload,
+  ): Promise<AccountProfile> {
+    const account = await this.users.findById(user.userId);
+    if (!account) throw new AppError(AccountErrorCode.ACCOUNT_NOT_FOUND);
+    return this.users.toProfile(account);
+  }
+
+  @ApiOperation({ summary: "签发 60s 短时效 WS ticket" })
+  @Get("ws-ticket")
+  wsTicket(@CurrentUser() user: CurrentUserPayload): { ticket: string } {
+    const ticket = this.jwt.sign(
+      { userId: user.userId, email: user.email, t: "ws" },
+      { expiresIn: "60s" },
+    );
+    return { ticket };
   }
 
   private signResponse(user: Account): AuthResponse {
