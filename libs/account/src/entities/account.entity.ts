@@ -20,8 +20,8 @@ export class Account {
   @Column({ type: "varchar", length: 255 })
   email!: string;
 
-  @Column({ type: "varchar", length: 255 })
-  passwordHash!: string;
+  @Column({ type: "varchar", length: 255, nullable: true })
+  passwordHash!: string | null;
 
   @Column({ type: "varchar", length: 64 })
   displayName!: string;

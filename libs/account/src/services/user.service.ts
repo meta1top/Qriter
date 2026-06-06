@@ -48,15 +48,17 @@ export class UserService {
 
   /**
    * 校验登录凭证并返回账号。邮箱不存在或密码错误统一抛 INVALID_CREDENTIALS，
-   * 避免泄露账号是否存在。
+   * 避免泄露账号是否存在。谷歌-only 账号（passwordHash 为 null）同样视为凭证无效。
    *
-   * @throws {AppError} INVALID_CREDENTIALS 当邮箱不存在或密码不匹配时。
+   * @throws {AppError} INVALID_CREDENTIALS 当邮箱不存在、账号无密码或密码不匹配时。
    */
   async validateCredentials(input: LoginInput): Promise<Account> {
     const account = await this.accountRepo.findOne({
       where: { email: input.email },
     });
-    if (!account) throw new AppError(AccountErrorCode.INVALID_CREDENTIALS);
+    if (!account || account.passwordHash == null) {
+      throw new AppError(AccountErrorCode.INVALID_CREDENTIALS);
+    }
     const ok = await bcrypt.compare(input.password, account.passwordHash);
     if (!ok) throw new AppError(AccountErrorCode.INVALID_CREDENTIALS);
     return account;
