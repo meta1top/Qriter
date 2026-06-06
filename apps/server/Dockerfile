@@ -5,11 +5,13 @@
 #
 # 构建（在 repo root）：
 #   docker build -f apps/server/Dockerfile -t qriter/server:local .
-# 起动：
+# 起动（业务配置走 Nacos —— 只传 Nacos 连接信息）：
 #   docker run --rm -p 3000:3000 \
-#     -e DATABASE_URL=postgresql://qriter:qriter@host.docker.internal:5432/qriter \
-#     -e JWT_SECRET=local-test-secret-min-16 \
+#     -e NACOS_SERVER_ADDR=host.docker.internal:8848 \
+#     -e NACOS_USERNAME=nacos -e NACOS_PASSWORD=... \
+#     -e NACOS_DATA_ID=qriter-server.yaml \
 #     qriter/server:local
+# （database / jwt / redis / llm / port 全在 Nacos 的 dataId 里。）
 
 # ============ Stage 1: deps ===============================================
 FROM node:22-alpine AS deps
@@ -63,8 +65,9 @@ RUN cp -r /repo/apps/server/dist /out/dist \
 # ============ Stage 3: runtime ============================================
 FROM node:22-alpine AS runtime
 WORKDIR /app
-ENV NODE_ENV=production \
-    PORT=3000
+# NODE_ENV 仅作容器约定（部分依赖按它优化）；app 的运行模式取自 Nacos 配置 node_env。
+# 不再设 PORT —— server 监听 config.port（须为 3000，与 EXPOSE / healthcheck 一致）。
+ENV NODE_ENV=production
 
 # 仅 copy deploy 产物，根 monorepo 不进 runtime
 COPY --from=build /out ./

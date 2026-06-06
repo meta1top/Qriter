@@ -2,11 +2,12 @@ import {
   AgentModule as AgentCoreModule,
   CHECKPOINTER_CONN_STRING,
   GraphService,
+  LLM_OPTIONS,
   NOVEL_STORE_PORT,
 } from "@qriter/agent";
 import { BookModule } from "@qriter/book";
 import { Global, Module, type OnApplicationBootstrap } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
+import { type AppConfig, APP_CONFIG } from "../config/app-config.schema";
 
 import { AuthModule } from "../auth/auth.module";
 import { SessionGateway } from "../ws/session.gateway";
@@ -19,7 +20,7 @@ import { NovelStoreAdapter } from "./novel-store.adapter";
  *
  * - 引入 AgentCoreModule（GraphService 等图编排能力）+ BookModule（书籍域）。
  * - 绑定 agent core 留给 app 层的注入 token：
- *   - `CHECKPOINTER_CONN_STRING`：LangGraph PostgresSaver 连接串（取 DATABASE_URL）；
+ *   - `CHECKPOINTER_CONN_STRING`：LangGraph PostgresSaver 连接串（由 config.database 拼出）；
  *   - `NOVEL_STORE_PORT`：写作域持久化适配器（NovelStoreAdapter）。
  * - AgentRunnerService：编排 run + EventEmitter2 广播。
  * - SessionGateway：WS 流式转发（依赖 AuthModule 的 JwtService）。
@@ -40,16 +41,25 @@ import { NovelStoreAdapter } from "./novel-store.adapter";
   controllers: [AgentController],
   providers: [
     {
+      // LangGraph PostgresSaver 连接串 —— 由 config.database 拼出（与 TypeORM 同库）。
       provide: CHECKPOINTER_CONN_STRING,
-      inject: [ConfigService],
-      useFactory: (cfg: ConfigService): string =>
-        cfg.getOrThrow<string>("DATABASE_URL"),
+      inject: [APP_CONFIG],
+      useFactory: ({ database: d }: AppConfig): string =>
+        `postgresql://${encodeURIComponent(d.username)}:${encodeURIComponent(
+          d.password,
+        )}@${d.host}:${d.port}/${d.database}`,
     },
     { provide: NOVEL_STORE_PORT, useClass: NovelStoreAdapter },
+    {
+      // LLM 选项从 config.llm 绑定（来自 Nacos / YAML）；未配则 undefined → agent 回退 env。
+      provide: LLM_OPTIONS,
+      inject: [APP_CONFIG],
+      useFactory: (cfg: AppConfig) => cfg.llm,
+    },
     AgentRunnerService,
     SessionGateway,
   ],
-  exports: [CHECKPOINTER_CONN_STRING, NOVEL_STORE_PORT],
+  exports: [CHECKPOINTER_CONN_STRING, NOVEL_STORE_PORT, LLM_OPTIONS],
 })
 export class AgentModule implements OnApplicationBootstrap {
   constructor(private readonly graph: GraphService) {}

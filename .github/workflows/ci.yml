@@ -42,11 +42,12 @@ jobs:
           --health-timeout 3s
           --health-retries 10
 
+    # 仅 e2e 测试 harness 用（test-db.ts 读 TEST_DATABASE_URL；auth-flow 的 redis case
+    # 读 REDIS_URL）。app 本身的配置走 Nacos / YAML，e2e 用自建 TestingModule，不读这些。
     env:
-      DATABASE_URL: postgresql://qriter:qriter@localhost:5432/qriter
+      TEST_DATABASE_URL: postgresql://qriter:qriter@localhost:5432/qriter
       REDIS_URL: redis://localhost:6379
       NODE_ENV: test
-      JWT_SECRET: ci-test-secret-not-for-production
 
     steps:
       - uses: actions/checkout@v4

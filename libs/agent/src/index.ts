@@ -37,9 +37,14 @@ export type {
 } from "./llm/llm.factory";
 export {
   createEnvModelProvider,
+  createModelProvider,
+  LLM_OPTIONS,
+  type LlmOptions,
   MODEL_META,
   MODEL_PROVIDER,
   type ModelMeta,
+  llmOptionsFromEnv,
+  resolveModelMeta,
   resolveModelMetaFromEnv,
 } from "./llm/model-provider";
 export { COMPACTION_SYSTEM_PROMPT } from "./prompt/compactor.prompt";

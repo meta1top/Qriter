@@ -12,7 +12,6 @@ import {
   traceIdMiddleware,
 } from "@qriter/shared";
 import type { INestApplication } from "@nestjs/common";
-import { ConfigModule } from "@nestjs/config";
 import { APP_GUARD, Reflector } from "@nestjs/core";
 import { JwtModule } from "@nestjs/jwt";
 import { PassportModule } from "@nestjs/passport";
@@ -30,6 +29,7 @@ import request from "supertest";
 
 import { JwtAuthGuard } from "../../src/auth/jwt-auth.guard";
 import { JwtStrategy } from "../../src/auth/jwt.strategy";
+import { type AppConfig, APP_CONFIG } from "../../src/config/app-config.schema";
 import { AuthController } from "../../src/rest/auth.controller";
 import {
   createTestDb,
@@ -38,6 +38,23 @@ import {
 } from "../setup/test-db";
 
 const I18N_PATH = path.join(__dirname, "..", "..", "i18n");
+
+/** e2e 测试用最小 AppConfig —— jwt.secret 必须与下面 JwtModule.register 的 secret 一致。 */
+const TEST_CONFIG: AppConfig = {
+  node_env: "test",
+  port: 3000,
+  database: {
+    type: "postgres",
+    host: "localhost",
+    port: 5433,
+    username: "qriter",
+    password: "qriter",
+    database: "qriter",
+    synchronize: false,
+    autoLoadEntities: true,
+  },
+  jwt: { secret: "e2e-test-secret-1234567890", expires: "1h" },
+};
 
 const REDIS_URL = process.env.REDIS_URL ?? "redis://localhost:6380";
 
@@ -110,16 +127,6 @@ describe.each<[Mode]>([
 
     const moduleRef = await Test.createTestingModule({
       imports: [
-        ConfigModule.forRoot({
-          isGlobal: true,
-          ignoreEnvFile: true,
-          load: [
-            () => ({
-              JWT_SECRET: "e2e-test-secret-1234567890",
-              JWT_EXPIRES: "1h",
-            }),
-          ],
-        }),
         CommonModule.forRoot(commonOptions),
         I18nModule.forRoot({
           fallbackLanguage: "zh",
@@ -139,7 +146,11 @@ describe.each<[Mode]>([
         AccountModule,
       ],
       controllers: [AuthController],
-      providers: [JwtStrategy, { provide: APP_GUARD, useClass: JwtAuthGuard }],
+      providers: [
+        { provide: APP_CONFIG, useValue: TEST_CONFIG },
+        JwtStrategy,
+        { provide: APP_GUARD, useClass: JwtAuthGuard },
+      ],
     }).compile();
 
     app = moduleRef.createNestApplication();

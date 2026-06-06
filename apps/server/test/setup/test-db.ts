@@ -20,7 +20,7 @@ import { InitialSchema1780502575371 } from "../../src/migrations/1780502575371-I
 const DEFAULT_URL =
   process.env.TEST_DATABASE_URL ??
   process.env.DATABASE_URL ??
-  "postgresql://qriter:qriter@localhost:5432/qriter";
+  "postgresql://qriter:qriter@localhost:5433/qriter";
 
 export interface TestDbContext {
   schema: string;

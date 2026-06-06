@@ -48,20 +48,15 @@ export class CommonModule {
    * @Module({ imports: [CommonModule.forRoot({ lock: new RedisLockProvider(redis) })] })
    * ```
    *
-   * 异步配置（云端轨：根据 ConfigService.REDIS_URL 选 memory / redis）：
+   * 异步配置（按共享的 REDIS_CLIENT 选 memory / redis）：
    *
    * ```ts
    * CommonModule.forRootAsync({
-   *   inject: [ConfigService],
-   *   useFactory: (cfg: ConfigService) => {
-   *     const url = cfg.get<string>("REDIS_URL");
-   *     if (!url) return {};                 // memory 兜底
-   *     const redis = new Redis(url);
-   *     return {
-   *       lock: new RedisLockProvider(redis),
-   *       cache: new RedisCacheProvider(redis),
-   *     };
-   *   },
+   *   inject: [REDIS_CLIENT],               // 由全局 RedisModule 从 config.redis 构造
+   *   useFactory: (redis: Redis | null) =>
+   *     redis
+   *       ? { lock: new RedisLockProvider(redis), cache: new RedisCacheProvider(redis) }
+   *       : {},                             // null → memory 兜底
    * })
    * ```
    */

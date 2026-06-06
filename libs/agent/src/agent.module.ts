@@ -3,7 +3,13 @@ import { DiscoveryModule } from "@nestjs/core";
 import { EventEmitterModule } from "@nestjs/event-emitter";
 import { ContextCompactor } from "./compaction/context-compactor.service";
 import { GraphService } from "./graph/graph.service";
-import { createEnvModelProvider, MODEL_PROVIDER } from "./llm/model-provider";
+import {
+  createEnvModelProvider,
+  createModelProvider,
+  LLM_OPTIONS,
+  type LlmOptions,
+  MODEL_PROVIDER,
+} from "./llm/model-provider";
 import { SkillService } from "./skills/skill.service";
 import { CharacterCreateTool } from "./tools/builtins/character-create.tool";
 import { SkillListTool } from "./tools/builtins/skill-list.tool";
@@ -36,8 +42,13 @@ import { ToolRegistry } from "./tools/tool-registry";
     CharacterCreateTool,
     ContextCompactor,
     {
+      // opts 可能为 undefined 的两种来源，都走 env 回退（务必保留 opts 判空，不要写成 opts!）：
+      //   1. standalone（libs/agent 单测）：没人提供 LLM_OPTIONS → optional 注入得 undefined；
+      //   2. app 提供了 LLM_OPTIONS，但值 = config.llm 而 config.llm 未配 → undefined。
       provide: MODEL_PROVIDER,
-      useFactory: () => createEnvModelProvider(),
+      inject: [{ token: LLM_OPTIONS, optional: true }],
+      useFactory: (opts?: LlmOptions) =>
+        opts ? createModelProvider(opts) : createEnvModelProvider(),
     },
     GraphService,
   ],

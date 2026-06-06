@@ -1,13 +1,38 @@
 # qriter server 本地开发配置（提交，含 localhost 默认值，pnpm dev 开箱即用）。
 # 部署环境在 .env 配置 NACOS_SERVER_ADDR 后，本文件不会被读取（loader 走 Nacos 分支）。
 # 个人覆盖：把要改的项写进 config/application.local.yml（已 gitignore）。
+#
+# 配置为「多层级对象」，由 AppModule.forRoot(config) 分发：
+#   database 整块透传给 TypeORM；jwt → 鉴权；redis → 锁/缓存/限流。
 node_env: development
 port: 3000
+
+# database 块直接映射 TypeORM DataSourceOptions（可按需追加 ssl / extra / poolSize / timezone 等）
 database:
-  url: postgresql://qriter:qriter@localhost:5433/qriter
+  type: postgres
+  host: localhost
+  port: 5433
+  username: qriter
+  password: qriter
+  database: qriter
+  synchronize: false
+  autoLoadEntities: true
+  logging:
+    - error
+    - warn
+    - migration
+
 jwt:
   secret: qriter-dev-secret-change-in-prod-min-16
   expires: 7d
-# Redis：留空走 memory 兜底；本地起 redis（pnpm dev:db:up，端口 6380）后再启用：
+
+# Redis：留空（整块注释掉）走 memory 兜底；本地起 redis（pnpm dev:db:up，端口 6380）后再启用：
 # redis:
 #   url: redis://localhost:6380
+
+# LLM 凭证（agent 用）—— 配了从这里取，不需要任何环境变量。未配则 agent 暂不可跑模型。
+# llm:
+#   provider: openai          # 或 anthropic
+#   model: gpt-4o-mini
+#   apiKey: sk-...
+#   baseUrl: https://...      # 可选，自建网关 / 兼容端点

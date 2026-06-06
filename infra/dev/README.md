@@ -36,11 +36,13 @@ services:
       - "6381:6379"   # 改宿主端口（容器内仍 6379）
 ```
 
-同步修改 `apps/server/.env.development`：
+同步在 `apps/server/config/application.local.yml`（个人覆盖，已 gitignore）改对应端口：
 
-```
-DATABASE_URL=postgresql://qriter:qriter@localhost:5434/qriter
-REDIS_URL=redis://localhost:6381
+```yaml
+database:
+  port: 5434
+redis:
+  url: redis://localhost:6381
 ```
 
 ## 健康检查排查
@@ -59,7 +61,7 @@ docker inspect qriter-dev-redis    --format='{{.State.Health.Status}}'
 
 ## Redis 是否必需
 
-不是。server 的 `CommonModule.forRootAsync` 在 `REDIS_URL` 不设置时回退到 memory 兜底（进程内互斥锁 + LRU 缓存），开发体验完全相同。Redis 容器仅在以下场景需要：
+不是。server 的 `CommonModule.forRootAsync` 在 `config.redis` 未配置（application.yml 里 redis 整块注释）时回退到 memory 兜底（进程内互斥锁 + LRU 缓存），开发体验完全相同。Redis 容器仅在以下场景需要：
 
 - 跑 e2e 的 redis 链路（`describe.each([["memory"], ["redis"]])` 中的 redis case）
 - 模拟多节点 / 多 server 实例共享锁与缓存

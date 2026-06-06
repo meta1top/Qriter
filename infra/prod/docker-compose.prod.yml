@@ -1,9 +1,9 @@
 # qriter 生产形态 docker-compose 编排（postgres + redis + server）。
 #
-# 用法（在 repo root）：
-#   cp infra/prod/.env.prod.example infra/prod/.env.prod
-#   # 改 .env.prod 里的 secret
-#   docker compose -f infra/prod/docker-compose.prod.yml --env-file infra/prod/.env.prod up -d
+# 用法：
+#   cd infra/prod
+#   cp .env.prod.example .env.prod     # 改 NACOS_* 连接 + POSTGRES_* 初始化密码
+#   docker compose -f docker-compose.prod.yml --env-file .env.prod up -d
 #
 # 数据库迁移：
 #   迁移在容器启动后手动跑一次（见 infra/prod/README.md「数据库迁移」节）。
@@ -54,13 +54,19 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+    # server 只吃 Nacos 连接信息；node_env / port / database / jwt / redis / llm
+    # 全在 Nacos 的 dataId 里。Nacos 配置需满足（与本 compose 拓扑一致）：
+    #   node_env: production
+    #   port: 3000                        # 与下面 ports 右侧、healthcheck 一致
+    #   database: { host: postgres, port: 5432, username/password/database 同 POSTGRES_* }
+    #   redis:    { url: redis://redis:6379 }
     environment:
-      NODE_ENV: production
-      PORT: 3000
-      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
-      REDIS_URL: redis://redis:6379
-      JWT_SECRET: ${JWT_SECRET}
-      JWT_EXPIRES: ${JWT_EXPIRES:-7d}
+      NACOS_SERVER_ADDR: ${NACOS_SERVER_ADDR}
+      NACOS_NAMESPACE: ${NACOS_NAMESPACE:-public}
+      NACOS_GROUP: ${NACOS_GROUP:-DEFAULT_GROUP}
+      NACOS_DATA_ID: ${NACOS_DATA_ID:-qriter-server.yaml}
+      NACOS_USERNAME: ${NACOS_USERNAME}
+      NACOS_PASSWORD: ${NACOS_PASSWORD}
     ports:
       - "${SERVER_PORT:-3000}:3000"
 

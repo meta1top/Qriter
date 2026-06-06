@@ -39,7 +39,7 @@
 |------|-----------|------|
 | `sync-locales.ts` | `pnpm sync:locales` | 扫描前后端 `t()` / `useTranslations` 调用对齐 locale JSON（missing / orphan / asymmetric） |
 | `typeorm-cli.ts` | （由各 app `migration:*` 转发） | 包装 `typeorm-ts-node-commonjs`：把短动词映射成 `migration:*` 子命令并追加 `-d <datasource>` |
-| `archive-migrations.ts` | `pnpm migration:archive:server` | 把 `apps/<app>/migrations/` 下已执行迁移文件归档到 `migrations/archive/` |
+| `archive-migrations.ts` | `pnpm migration:archive` | 把 `apps/server/migrations/` 下已执行迁移文件归档到 `migrations/archive/` |
 | `lib/ts-files.ts` | （内部库） | 递归收集源文件（不跟随软链，断开自引用环），供六个围栏复用 |
 
 ### sync-locales 模式

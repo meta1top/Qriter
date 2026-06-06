@@ -5,19 +5,18 @@ import {
   Module,
   type OnModuleDestroy,
 } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
 import Redis from "ioredis";
+import { type AppConfig, APP_CONFIG } from "./config/app-config.schema";
 
 /**
  * 共享 Redis 连接的 token —— CommonModule、ThrottlerModule、RedisHealthIndicator
  * 等都 inject 同一份 Redis 实例，避免多个连接池。
  *
- * value：`Redis | null`。`REDIS_URL` 未配置时为 null，消费方按 null 走 memory 兜底。
+ * value：`Redis | null`。`config.redis` 未配置时为 null，消费方按 null 走 memory 兜底。
  *
- * 放在独立的 `@Global()` 模块里导出，而非塞进 AppModule.providers：
- * Nest 11 的模块封装更严，被 import 的动态模块（ThrottlerModule/CommonModule
- * 的 forRootAsync）其工厂 `inject` 无法穿透到宿主模块「未导出」的 provider，
- * 必须靠全局模块导出才能被解析。
+ * 放在独立的 `@Global()` 模块里导出：Nest 11 的模块封装更严，被 import 的动态模块
+ * （ThrottlerModule / CommonModule 的 forRootAsync）其工厂 `inject` 无法穿透到宿主
+ * 模块「未导出」的 provider，必须靠全局模块导出才能被解析。
  */
 export const REDIS_CLIENT = Symbol("REDIS_CLIENT");
 
@@ -43,18 +42,17 @@ class RedisLifecycle implements OnModuleDestroy {
 }
 
 /**
- * 全局 Redis 模块 —— 提供并导出 `REDIS_CLIENT`，供锁 / 缓存 / 限流 / 健康检查共享。
- *
- * 依赖全局 `ConfigService`（ConfigModule.forRoot({ isGlobal: true })）读取 `REDIS_URL`。
+ * 全局 Redis 模块 —— 从 `APP_CONFIG.redis` 读连接串构建 `REDIS_CLIENT` 并导出。
+ * 供锁 / 缓存 / 限流 / 健康检查共享。
  */
 @Global()
 @Module({
   providers: [
     {
       provide: REDIS_CLIENT,
-      inject: [ConfigService],
-      useFactory: (cfg: ConfigService): Redis | null => {
-        const url = cfg.get<string>("REDIS_URL");
+      inject: [APP_CONFIG],
+      useFactory: (config: AppConfig): Redis | null => {
+        const url = config.redis?.url;
         if (!url) return null;
         // 启动失败让 server 整体 fail-fast，不悄悄退化到 memory
         const redis = new Redis(url, {

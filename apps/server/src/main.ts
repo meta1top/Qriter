@@ -9,17 +9,18 @@ import { NestFactory, Reflector } from "@nestjs/core";
 import { I18nService } from "nestjs-i18n";
 import { AppModule } from "./app.module";
 import { setupSwagger } from "./app.swagger";
+import { AppConfigSchema } from "./config/app-config.schema";
 
 async function bootstrap() {
-  // 引导式配置：Nest 起来前先把 YAML / Nacos 的配置写进 process.env，
-  // 供下面 AppModule 的 ConfigModule + EnvSchema 照常校验。
-  await loadAppConfig({
+  // 配置加载在 Nest 生命周期之外：从 YAML / Nacos 读成强类型嵌套 AppConfig 并校验。
+  const config = await loadAppConfig(AppConfigSchema, {
     cwd: process.cwd(),
-    envFiles: [".env.development", ".env"],
+    envFiles: [".env"],
     yamlFiles: ["config/application.yml", "config/application.local.yml"],
   });
 
-  const app = await NestFactory.create(AppModule);
+  // 再经 AppModule.forRoot(config) 把各切片分发给对应模块（TypeORM / Redis / JWT…）。
+  const app = await NestFactory.create(AppModule.forRoot(config));
 
   // 标准全局链路（顺序：trace → pipe → interceptor → filter）
   // - traceIdMiddleware：注入 / 透传 x-trace-id，让后续 interceptor / filter / 日志可追溯
@@ -36,13 +37,12 @@ async function bootstrap() {
   app.setGlobalPrefix("api");
 
   // dev 模式挂载 Swagger UI（/api/docs）；生产不挂载避免泄漏内部 API 结构
-  if (process.env.NODE_ENV !== "production") {
+  if (config.node_env !== "production") {
     setupSwagger(app);
   }
 
-  const port = process.env.PORT ?? 3000;
-  await app.listen(port);
-  console.log(`qriter server running on http://localhost:${port}`);
+  await app.listen(config.port);
+  console.log(`qriter server running on http://localhost:${config.port}`);
 }
 
 bootstrap();

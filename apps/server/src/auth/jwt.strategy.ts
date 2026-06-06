@@ -1,7 +1,7 @@
-import { Injectable } from "@nestjs/common";
-import { ConfigService } from "@nestjs/config";
+import { Inject, Injectable } from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
 import { ExtractJwt, Strategy } from "passport-jwt";
+import { type AppConfig, APP_CONFIG } from "../config/app-config.schema";
 
 export const JWT_STRATEGY_NAME = "jwt";
 
@@ -12,15 +12,15 @@ export interface JwtPayload {
 
 /**
  * qriter JWT Strategy，Strategy 名 `"jwt"`。
- * secret 从 env 强制读取（getOrThrow），不允许默认兜底。
+ * secret 取自 `APP_CONFIG.jwt.secret`（由 YAML / Nacos 配置而来）。
  */
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, JWT_STRATEGY_NAME) {
-  constructor(config: ConfigService) {
+  constructor(@Inject(APP_CONFIG) config: AppConfig) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: config.getOrThrow<string>("JWT_SECRET"),
+      secretOrKey: config.jwt.secret,
     });
   }
 

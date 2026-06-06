@@ -9,7 +9,6 @@ import {
   traceIdMiddleware,
 } from "@qriter/shared";
 import type { INestApplication } from "@nestjs/common";
-import { ConfigModule } from "@nestjs/config";
 import { Reflector } from "@nestjs/core";
 import { TerminusModule } from "@nestjs/terminus";
 import { Test } from "@nestjs/testing";
@@ -48,11 +47,6 @@ describe("Health e2e", () => {
 
     const moduleRef = await Test.createTestingModule({
       imports: [
-        ConfigModule.forRoot({
-          isGlobal: true,
-          ignoreEnvFile: true,
-          load: [() => ({})],
-        }),
         // memory 兜底：提供 LOCK_PROVIDER 供 RedisHealthIndicator 经锁探活报 up
         CommonModule.forRoot({}),
         I18nModule.forRoot({
