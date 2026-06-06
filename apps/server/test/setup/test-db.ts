@@ -15,7 +15,9 @@ import { DataSource, type DataSourceOptions } from "typeorm";
 import { SnakeNamingStrategy } from "typeorm-naming-strategies";
 
 import { Account } from "../../../../libs/account/src/entities/account.entity";
+import { AccountIdentity } from "../../../../libs/account/src/entities/account-identity.entity";
 import { InitialSchema1780502575371 } from "../../src/migrations/1780502575371-InitialSchema";
+import { AddAccountIdentity1780776290465 } from "../../src/migrations/1780776290465-AddAccountIdentity";
 
 const DEFAULT_URL =
   process.env.TEST_DATABASE_URL ??
@@ -64,8 +66,8 @@ export async function createTestDb(): Promise<TestDbContext> {
     schema,
     // 让所有连接默认在测试 schema 内创建 / 读对象，避免 unqualified DDL 落 public
     extra: { options: `-c search_path=${schema}` },
-    entities: [Account],
-    migrations: [InitialSchema1780502575371],
+    entities: [Account, AccountIdentity],
+    migrations: [InitialSchema1780502575371, AddAccountIdentity1780776290465],
     namingStrategy: new SnakeNamingStrategy(),
     synchronize: false,
     logging: false,
