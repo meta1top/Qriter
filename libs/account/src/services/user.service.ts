@@ -80,6 +80,27 @@ export class UserService {
     return this.accountRepo.findOne({ where: { id } });
   }
 
+  /** 按邮箱查找账号，不存在返回 null。 */
+  async findByEmail(email: string): Promise<Account | null> {
+    return this.accountRepo.findOne({ where: { email } });
+  }
+
+  /**
+   * 创建一个社交登录账号（无密码）。仅单表 insert，无需 @Transactional。
+   * 由 AccountIdentityService.findOrCreateByGoogle 在其事务上下文内调用。
+   */
+  async createSocialAccount(input: {
+    email: string;
+    displayName: string;
+  }): Promise<Account> {
+    const account = this.accountRepo.create({
+      email: input.email,
+      passwordHash: null,
+      displayName: input.displayName,
+    });
+    return this.accountRepo.save(account);
+  }
+
   /**
    * 投影为公开档案 —— 剥离 passwordHash 等敏感列，仅返回前端可见的安全字段子集。
    */
