@@ -24,15 +24,18 @@ export interface ModelMeta {
 
 /** LLM 凭证 / 选项（由 config.llm 提供，避免散落环境变量）。 */
 export interface LlmOptions {
-  provider?: "anthropic" | "openai";
+  /** deepseek 走 OpenAI 兼容协议（baseUrl=https://api.deepseek.com）。 */
+  provider?: "anthropic" | "openai" | "deepseek";
   model?: string;
   apiKey?: string;
   baseUrl?: string;
 }
 
-/** 按 provider 给一个合理的默认模型 id。 */
+/** 按 provider 给一个合理的默认模型 id（通常 config.llm.model 会显式给）。 */
 function defaultModel(provider: string): string {
-  return provider === "anthropic" ? "claude-3-5-sonnet-latest" : "gpt-4o-mini";
+  if (provider === "anthropic") return "claude-3-5-sonnet-latest";
+  if (provider === "deepseek") return "deepseek-chat";
+  return "gpt-4o-mini";
 }
 
 /** 从一组 LlmOptions 归一出 provider/model（provider 缺省 openai）。 */
@@ -47,8 +50,8 @@ export function resolveModelMeta(opts: LlmOptions): ModelMeta {
  */
 export function llmOptionsFromEnv(): LlmOptions {
   const explicit = process.env.QRITER_MODEL_PROVIDER?.toLowerCase();
-  const provider: "anthropic" | "openai" =
-    explicit === "anthropic" || explicit === "openai"
+  const provider: "anthropic" | "openai" | "deepseek" =
+    explicit === "anthropic" || explicit === "openai" || explicit === "deepseek"
       ? explicit
       : process.env.ANTHROPIC_API_KEY
         ? "anthropic"

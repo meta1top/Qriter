@@ -1,4 +1,4 @@
-import { RedisHealthIndicator, SkipResponseEnvelope } from "@qriter/shared";
+import { RedisHealthIndicator, SkipResponseEnvelope } from "@qriter/common";
 import { Controller, Get } from "@nestjs/common";
 import {
   HealthCheck,

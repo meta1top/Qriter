@@ -1,5 +1,5 @@
-import { themeScript } from "@qriter/common";
 import { TooltipProvider } from "@qriter/design";
+import { themeScript } from "@qriter/web-common";
 import type { Metadata } from "next";
 import { IntlProvider } from "@/components/intl-provider";
 import { Providers } from "@/components/providers";

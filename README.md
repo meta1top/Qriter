@@ -14,15 +14,16 @@ apps/
 └── web/       Next.js 单前端（:3001）
 
 libs/
-├── shared/    NestJS 基础设施（装饰器 / TxTypeOrmModule / Lock / Cache / DTO / 错误 / 拦截器 / 守卫 / health / ws / config / utils），@qriter/shared
 ├── types/     纯 Zod schema + TS 类型（零框架依赖，前后端共享），@qriter/types
+├── shared/    后端共享「声明」：error-code / AppError / DTO 桥（createZodDto/createI18nZodDto）/ PageDto / 常量，@qriter/shared
+├── common/    后端「基建」运行时：装饰器 / TxTypeOrmModule / Lock / Cache / 拦截器 / 守卫 / 中间件 / health / ws / config-loader / CommonModule / utils，@qriter/common
 ├── account/   账号域业务（Account），@qriter/account
 ├── book/      书籍域业务（Book / Chapter），@qriter/book
 └── agent/     Agent Core（LangGraph 编排 / 工具 / skills / checkpointer），@qriter/agent
 
 packages/
-├── common/    前端通用逻辑（axios client + theme），@qriter/common
-└── design/    Tailwind + shadcn/Radix 组件库，@qriter/design
+├── web-common/ 前端通用逻辑（axios client + theme），@qriter/web-common
+└── design/     Tailwind + shadcn/Radix 组件库，@qriter/design
 
 infra/
 ├── dev/       本地开发依赖（docker-compose Postgres + Redis）

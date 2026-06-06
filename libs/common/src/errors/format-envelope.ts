@@ -1,8 +1,8 @@
 import { HttpException } from "@nestjs/common";
 import type { I18nService } from "nestjs-i18n";
 
-import { AppError } from "./app.error";
-import { CommonErrorCode } from "./common.error-codes";
+import { AppError } from "@qriter/shared";
+import { CommonErrorCode } from "@qriter/shared";
 
 /**
  * 错误响应 envelope —— HTTP / WebSocket 共用形态（Phase 6 D1）。

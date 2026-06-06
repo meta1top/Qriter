@@ -4,14 +4,14 @@
 #
 # 配置为「多层级对象」，由 AppModule.forRoot(config) 分发：
 #   database 整块透传给 TypeORM；jwt → 鉴权；redis → 锁/缓存/限流。
-node_env: development
+# 运行模式（dev/prod）不在这里 —— 取自 NODE_ENV（本地不设=dev，prod 镜像烤 production）。
 port: 3000
 
 # database 块直接映射 TypeORM DataSourceOptions（可按需追加 ssl / extra / poolSize / timezone 等）
 database:
   type: postgres
   host: localhost
-  port: 5433
+  port: 5432
   username: qriter
   password: qriter
   database: qriter
@@ -26,13 +26,17 @@ jwt:
   secret: qriter-dev-secret-change-in-prod-min-16
   expires: 7d
 
-# Redis：留空（整块注释掉）走 memory 兜底；本地起 redis（pnpm dev:db:up，端口 6380）后再启用：
+# Redis：留空（整块注释掉）走 memory 兜底；本地起 redis（pnpm dev:db:up，端口 6380）后再启用。
+# host / port / db / password 离散字段；db 默认 0，password 不填则无鉴权。
 # redis:
-#   url: redis://localhost:6380
+#   host: localhost
+#   port: 6380
+#   db: 0
+#   password: <redis-password>   # 开了 requirepass 才填
 
 # LLM 凭证（agent 用）—— 配了从这里取，不需要任何环境变量。未配则 agent 暂不可跑模型。
 # llm:
-#   provider: openai          # 或 anthropic
-#   model: gpt-4o-mini
+#   provider: deepseek        # anthropic / openai / deepseek
+#   model: deepseek-chat
 #   apiKey: sk-...
-#   baseUrl: https://...      # 可选，自建网关 / 兼容端点
+#   baseUrl: https://api.deepseek.com   # 可选；deepseek/openai 兼容端点的自定义地址

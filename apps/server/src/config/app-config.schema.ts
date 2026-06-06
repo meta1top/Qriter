@@ -32,11 +32,15 @@ export const JwtConfigSchema = z.object({
     .default("7d"),
 });
 
-/** Redis 配置（可选）。未配置 → 锁 / 缓存 / 限流走 memory 兜底（仅单实例正确）。 */
+/**
+ * Redis 配置（可选）—— host / port / db / password 离散字段。
+ * 未配置 → 锁 / 缓存 / 限流走 memory 兜底（仅单实例正确）。
+ */
 export const RedisConfigSchema = z.object({
-  url: z
-    .string()
-    .regex(/^rediss?:\/\//, "redis.url 必须以 redis:// 或 rediss:// 开头"),
+  host: z.string(),
+  port: z.coerce.number().int().min(1).max(65535).default(6379),
+  db: z.coerce.number().int().min(0).max(15).default(0),
+  password: z.string().optional(),
 });
 
 /**
@@ -44,7 +48,9 @@ export const RedisConfigSchema = z.object({
  * 避免散落环境变量。未配置则 agent 不可跑模型（lazy，实际取模型时才报错）。
  */
 export const LlmConfigSchema = z.object({
-  provider: z.enum(["anthropic", "openai"]).optional(),
+  // deepseek 走 OpenAI 兼容协议（baseUrl=https://api.deepseek.com），由 agent 的工厂
+  // 用 ChatOpenAI + baseUrl 路由，无需额外依赖。
+  provider: z.enum(["anthropic", "openai", "deepseek"]).optional(),
   model: z.string().optional(),
   apiKey: z.string().optional(),
   baseUrl: z.string().optional(),
@@ -57,9 +63,9 @@ export const LlmConfigSchema = z.object({
  * 再经 `AppModule.forRoot(config)` 把各切片分发给对应模块。
  */
 export const AppConfigSchema = z.object({
-  // 必填：不给默认值 —— 漏配 node_env 会让「生产」按 development 跑（自动迁移 + 挂 Swagger），
-  // 安全默认应是 fail-fast 而非静默退化。application.yml / Nacos 配置都须显式给出。
-  node_env: z.enum(["development", "production", "test"]),
+  // 注意：运行模式（dev/prod）不在这里 —— 它是「部署环境身份」而非业务配置，
+  // 由 process.env.NODE_ENV 决定（prod 镜像烤 production、本地不设=dev、jest=test），
+  // 不放 Nacos（避免与 NODE_ENV 两份来源打架 + 漏配静默退化的坑）。
   port: z.coerce.number().int().min(1).max(65535).default(3000),
   database: DatabaseConfigSchema,
   jwt: JwtConfigSchema,

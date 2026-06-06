@@ -65,15 +65,16 @@ apps/
 └── web/       Next.js 单前端（:3001）
 
 libs/
-├── shared/    后端 NestJS 基建（装饰器 / TxTypeOrmModule / Lock / Cache / DTO / 错误 / 拦截器 / 守卫 / health / ws / config / utils），别名 @qriter/shared
 ├── types/     纯 Zod schema + TS 类型（零框架依赖），前后端共享，别名 @qriter/types
+├── shared/    后端共享「声明」：面向 Nest 的 error-code 定义 + AppError、DTO 桥（createZodDto / createI18nZodDto）+ PageDto、常量。轻量（不含运行时机器），别名 @qriter/shared
+├── common/    后端「基建」运行时：装饰器（@Transactional / @WithLock / @Cacheable）/ TxTypeOrmModule / Lock / Cache / 拦截器 / 守卫 / 中间件 / health / ws / config-loader / CommonModule / utils。别名 @qriter/common
 ├── account/   账号域业务 lib（Account），别名 @qriter/account
 ├── book/      书籍域业务 lib（Book / Chapter），别名 @qriter/book
 └── agent/     Agent Core（LangGraph 图 / 工具 / skills / checkpointer / port），别名 @qriter/agent
 
 packages/
-├── common/    前端通用逻辑（axios client + theme），别名 @qriter/common
-└── design/    Tailwind + shadcn/Radix UI 组件库，别名 @qriter/design
+├── web-common/ 前端通用逻辑（axios client + theme），别名 @qriter/web-common
+└── design/     Tailwind + shadcn/Radix UI 组件库，别名 @qriter/design
 
 infra/
 ├── dev/       本地开发依赖（docker-compose Postgres + Redis）
@@ -85,13 +86,14 @@ infra/
 只允许从上到下、从右到左，**禁止反向**：
 
 ```
-后端：apps/server → libs/<domain>（account / book / agent） → libs/types → libs/shared
-前端：apps/web → packages（common / design） → libs/types
+后端：apps/server → libs/<domain>（account / book / agent） → libs/common → libs/shared → libs/types
+前端：apps/web → packages（web-common / design） → libs/types
 ```
 
 - `libs/types` 是前后端共享的纯类型层（Zod schema），**禁止依赖 NestJS / TypeORM**。
-- `libs/shared` 是后端基建，业务 lib（account / book / agent）依赖它，它不反依赖业务 lib。
-- 业务 lib 之间跨域访问只能通过对方域 Service 的公开方法，**禁止跨 lib 注入对方 Entity 的 Repository**。
+- `libs/shared` 是后端共享「声明」层（error-code / AppError / DTO 桥 / 常量），面向 Nest 但轻量；依赖 types，不依赖 common。
+- `libs/common` 是后端「基建」运行时（事务 / 锁 / 缓存 / 拦截器 / 守卫 / ws / config-loader / CommonModule）；依赖 shared + types。业务 lib 按需取 common（事务 / 锁）+ shared（DTO / 错误码）。
+- 三者都不反依赖业务 lib。业务 lib 之间跨域访问只能通过对方域 Service 的公开方法，**禁止跨 lib 注入对方 Entity 的 Repository**。
 
 ## 关键约定
 
@@ -103,7 +105,7 @@ infra/
 
 ### 事务、锁、缓存（仅在 Service 层）
 
-- **`@Transactional()`**：**跨表写入时使用**。单表 upsert / 单表 update 不需要。模块用 `TxTypeOrmModule.forFeature()` 注册 Entity（替代 `TypeOrmModule.forFeature()`）。事务上下文通过 `AsyncLocalStorage` 自动传播到子 Service，子 Service 无需重复挂 `@Transactional()`。`@Transactional` 的唯一合法来源是 `@qriter/shared`。
+- **`@Transactional()`**：**跨表写入时使用**。单表 upsert / 单表 update 不需要。模块用 `TxTypeOrmModule.forFeature()` 注册 Entity（替代 `TypeOrmModule.forFeature()`）。事务上下文通过 `AsyncLocalStorage` 自动传播到子 Service，子 Service 无需重复挂 `@Transactional()`。`@Transactional`（及 `@WithLock` / `@Cacheable` / `TxTypeOrmModule`）的唯一合法来源是 `@qriter/common`（基建）；`createI18nZodDto` / `AppError` / `defineErrorCode` 等「声明」来自 `@qriter/shared`。
 - **`@WithLock`**：并发竞态 / 幂等保护。**必须在 `@Transactional` 外层**（锁包事务），严禁事务内嵌套锁（事务-锁倒置，`pnpm check:lock-tx` 自动校验）。
 - **`@Cacheable` / `@CacheEvict`**：Service 类标 `@CacheableService()`；每个 `@Cacheable` 必须配对至少一个 `@CacheEvict`。缓存键格式：`模块:实体:#{参数索引或路径}`。
 - 装饰器组合顺序（从外到内）：`@WithLock` → `@Transactional` → `@CacheEvict`。
@@ -122,9 +124,10 @@ infra/
 
 ### 配置（Nacos / application.yml，环境变量最小化）
 
-- **配置源**：业务配置（`node_env` / `port` / `database` / `jwt` / `redis` / `llm`）是**多层级对象**，来自 **Nacos**（一个 dataId，内容为 YAML）。本地开发无 Nacos 时回退读 `apps/server/config/application.yml`（个人覆盖写 `application.local.yml`，已 gitignore）。
+- **配置源**：业务配置（`port` / `database` / `jwt` / `redis` / `llm`）是**多层级对象**，来自 **Nacos**（一个 dataId，内容为 YAML）。本地开发无 Nacos 时回退读 `apps/server/config/application.yml`（个人覆盖写 `application.local.yml`，已 gitignore）。
+- **运行模式不进 Nacos**：dev/prod 是「部署环境身份」而非业务配置，`isProd` 取自 `process.env.NODE_ENV`（prod 镜像烤 `production`、本地不设=dev、jest=test），不放配置中心（避免与 NODE_ENV 两份来源打架）。
 - **环境变量只放 Nacos 连接**：`NACOS_SERVER_ADDR` / `NACOS_NAMESPACE` / `NACOS_GROUP` / `NACOS_DATA_ID` / `NACOS_USERNAME` / `NACOS_PASSWORD`（写 `apps/server/.env`，见 `.env.example`）。**不再有** `DATABASE_URL` / `JWT_SECRET` 等扁平 env。
-- **加载链路**：`main.ts` 在 Nest 生命周期外调 `loadAppConfig(AppConfigSchema, …)`（`@qriter/shared`，async）→ 校验后的强类型 `AppConfig` → `AppModule.forRoot(config)` 把切片分发给各模块：`TypeOrmModule.forRoot(config.database)`、`RedisModule`（读 `config.redis`）、`AuthModule`（读 `config.jwt`）、agent（`config.database` 拼 checkpointer 连接串、`config.llm` 绑 `LLM_OPTIONS`）。全局 `APP_CONFIG` token 供任意 service 注入按需取用。**不用 `@nestjs/config`**。
+- **加载链路**：`main.ts` 在 Nest 生命周期外调 `loadAppConfig(AppConfigSchema, …)`（`@qriter/common`，async）→ 校验后的强类型 `AppConfig` → `AppModule.forRoot(config)` 把切片分发给各模块：`TypeOrmModule.forRoot(config.database)`、`RedisModule`（读 `config.redis`）、`AuthModule`（读 `config.jwt`）、agent（`config.database` 拼 checkpointer 连接串、`config.llm` 绑 `LLM_OPTIONS`）。全局 `APP_CONFIG` token 供任意 service 注入按需取用。**不用 `@nestjs/config`**。
 - **schema**：`apps/server/src/config/app-config.schema.ts`（`AppConfigSchema` + `DatabaseConfigSchema` 等 + `APP_CONFIG`）。`AppConfig` 的形状是应用自有的事；`libs/shared` 只提供通用 loader。
 - **迁移 CLI**：`data-source.cli.ts` 导出 `Promise<DataSource>`（同样经 `loadAppConfig` 走 Nacos / YAML，只取 database 切片）。
 - **LLM 凭证**：放 `config.llm`（Nacos / YAML），经 `LLM_OPTIONS` 注入 agent；未配才回退 `*_API_KEY` 环境变量。

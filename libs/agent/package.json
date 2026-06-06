@@ -15,6 +15,7 @@
     "@qriter/types": "workspace:*",
     "@langchain/anthropic": "0.3.34",
     "@langchain/core": "^0.3",
+    "@langchain/deepseek": "0.1.0",
     "@langchain/langgraph": "^0.2",
     "@langchain/langgraph-checkpoint": "~0.0.18",
     "@langchain/langgraph-checkpoint-postgres": "^0.0.5",

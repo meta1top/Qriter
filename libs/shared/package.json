@@ -13,47 +13,14 @@
   },
   "dependencies": {
     "@qriter/types": "workspace:*",
-    "async-mutex": "^0.5.0",
-    "dotenv": "^17.4.2",
-    "ioredis": "^5.10.1",
-    "js-yaml": "^4",
-    "lru-cache": "^11.0.0",
-    "nacos": "^2",
     "zod": "^3"
   },
   "peerDependencies": {
     "@nestjs/common": "^11",
-    "@nestjs/core": "^11",
-    "@nestjs/platform-socket.io": "^11",
-    "@nestjs/terminus": "^11",
-    "@nestjs/throttler": "^6",
-    "@nestjs/typeorm": "^11",
-    "@nestjs/websockets": "^11",
-    "nestjs-i18n": "^10",
     "nestjs-zod": "^4",
-    "reflect-metadata": "*",
-    "rxjs": "^7",
-    "socket.io": "^4",
-    "typeorm": "^0.3"
-  },
-  "peerDependenciesMeta": {
-    "@nestjs/platform-socket.io": {
-      "optional": true
-    },
-    "@nestjs/websockets": {
-      "optional": true
-    },
-    "socket.io": {
-      "optional": true
-    }
+    "reflect-metadata": "*"
   },
   "devDependencies": {
-    "@nestjs/platform-socket.io": "^11",
-    "@nestjs/websockets": "^11",
-    "@types/ioredis-mock": "^8.2.7",
-    "@types/js-yaml": "^4",
-    "@types/node": "^22",
-    "ioredis-mock": "^8.13.1",
-    "socket.io": "^4"
+    "@types/node": "^22"
   }
 }

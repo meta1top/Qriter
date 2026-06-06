@@ -83,18 +83,18 @@ pnpm check:tx -- --force-report
 
 **修复决策**：
 
-- 写动作之间**有强一致性要求**（其中一个失败必须回滚另一个）→ 加 `@Transactional()` 装饰器，并保证 import 自 `@qriter/shared`
+- 写动作之间**有强一致性要求**（其中一个失败必须回滚另一个）→ 加 `@Transactional()` 装饰器，并保证 import 自 `@qriter/common`
 - 写动作之间**只是顺序无关的副作用**（一个失败另一个保留也可以）→ 在方法上方加注释 `// tx-check: ignore` 豁免，注释里说明原因
 - 其中一个"写动作"实际是**外部 IO**（HTTP / MQ / Redis publish）→ 不能放进事务（参照 `.claude/skills/service-tx-lock-cache/SKILL.md`），重构为先做 IO 再开事务，或反之
 
-### WRONG_IMPORT — `@Transactional` 来源不是 `@qriter/shared`
+### WRONG_IMPORT — `@Transactional` 来源不是 `@qriter/common`
 
-> 项目内**唯一合法**的 `@Transactional` 实现来自 `@qriter/shared`，配合 `TxTypeOrmModule` 的 Repository Proxy 才能让事务真实生效。其他来源（如 `typeorm-transactional`）会装饰失效，事务名存实亡。
+> 项目内**唯一合法**的 `@Transactional` 实现来自 `@qriter/common`，配合 `TxTypeOrmModule` 的 Repository Proxy 才能让事务真实生效。其他来源（如 `typeorm-transactional`）会装饰失效，事务名存实亡。
 
 **修复**：把 import 改为：
 
 ```ts
-import { Transactional } from "@qriter/shared";
+import { Transactional } from "@qriter/common";
 ```
 
 无例外，全部纠正。

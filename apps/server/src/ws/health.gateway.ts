@@ -2,7 +2,7 @@ import {
   BaseWebSocketGateway,
   WsAuthGuard,
   WsExceptionFilter,
-} from "@qriter/shared";
+} from "@qriter/common";
 import { UseFilters, UseGuards } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import {

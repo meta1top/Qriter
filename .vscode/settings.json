@@ -13,5 +13,5 @@
   "[jsonc]": { "editor.defaultFormatter": "biomejs.biome" },
   "css.customData": [],
   "css.lint.unknownAtRules": "ignore",
-  "cSpell.words": ["qriter", "nacos", "Nacos"]
+  "cSpell.words": ["qriter", "nacos", "Nacos", "deepseek", "requirepass"]
 }

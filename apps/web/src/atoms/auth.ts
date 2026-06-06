@@ -1,14 +1,14 @@
 "use client";
 
-import { getAccessToken } from "@qriter/common";
 import type { Account } from "@qriter/types";
+import { getAccessToken } from "@qriter/web-common";
 import { atom } from "jotai";
 
 /**
  * 访问令牌 atom —— 单一来源。
  *
  * 初值从 localStorage 读取（SSR 阶段为 null），登录成功后由 useLogin 写入，
- * 退出 / 401 时清空。写令牌的副作用（落 localStorage）由 @qriter/common 的
+ * 退出 / 401 时清空。写令牌的副作用（落 localStorage）由 @qriter/web-common 的
  * setAccessToken / clearAccessToken 负责，这里只持有内存态。
  */
 export const accessTokenAtom = atom<string | null>(

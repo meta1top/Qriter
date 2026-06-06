@@ -10,7 +10,7 @@
  */
 import "reflect-metadata";
 import path from "node:path";
-import { loadAppConfig } from "@qriter/shared";
+import { loadAppConfig } from "@qriter/common";
 import { DataSource, type DataSourceOptions } from "typeorm";
 import { SnakeNamingStrategy } from "typeorm-naming-strategies";
 import { z } from "zod";

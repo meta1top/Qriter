@@ -7,7 +7,7 @@ import {
   RedisHealthIndicator,
   ResponseInterceptor,
   traceIdMiddleware,
-} from "@qriter/shared";
+} from "@qriter/common";
 import type { INestApplication } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
 import { TerminusModule } from "@nestjs/terminus";

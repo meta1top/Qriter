@@ -1,5 +1,5 @@
 {
-  "name": "@qriter/common",
+  "name": "@qriter/web-common",
   "version": "0.0.0",
   "private": true,
   "main": "./dist/index.js",

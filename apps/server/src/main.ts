@@ -4,7 +4,7 @@ import {
   loadAppConfig,
   ResponseInterceptor,
   traceIdMiddleware,
-} from "@qriter/shared";
+} from "@qriter/common";
 import { NestFactory, Reflector } from "@nestjs/core";
 import { I18nService } from "nestjs-i18n";
 import { AppModule } from "./app.module";
@@ -36,8 +36,9 @@ async function bootstrap() {
 
   app.setGlobalPrefix("api");
 
-  // dev 模式挂载 Swagger UI（/api/docs）；生产不挂载避免泄漏内部 API 结构
-  if (config.node_env !== "production") {
+  // dev 模式挂载 Swagger UI（/api/docs）；生产不挂载避免泄漏内部 API 结构。
+  // 运行模式取自 NODE_ENV（部署环境身份），不取自 Nacos 配置。
+  if (process.env.NODE_ENV !== "production") {
     setupSwagger(app);
   }
 

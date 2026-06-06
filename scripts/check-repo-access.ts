@@ -69,8 +69,8 @@ const NON_SERVICE_FILE_PATTERNS = [
  * 这些文件被允许注入任意 Repository，不会触发 NON_SERVICE_INJECT / CROSS_LIB_INJECT / DUP_OWNER。
  */
 const INFRA_WHITELIST = new Set<string>([
-  "libs/shared/src/decorators/transactional.decorator.ts",
-  "libs/shared/src/typeorm/tx-typeorm.module.ts",
+  "libs/common/src/decorators/transactional.decorator.ts",
+  "libs/common/src/typeorm/tx-typeorm.module.ts",
 ]);
 
 type IssueType = "DUP_OWNER" | "NON_SERVICE_INJECT" | "CROSS_LIB_INJECT";

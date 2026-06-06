@@ -54,12 +54,12 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
-    # server 只吃 Nacos 连接信息；node_env / port / database / jwt / redis / llm
-    # 全在 Nacos 的 dataId 里。Nacos 配置需满足（与本 compose 拓扑一致）：
-    #   node_env: production
+    # server 只吃 Nacos 连接信息；port / database / jwt / redis / llm 全在 Nacos dataId 里。
+    # 运行模式由镜像里的 NODE_ENV=production 决定（不放 Nacos）。
+    # Nacos 配置需满足（与本 compose 拓扑一致）：
     #   port: 3000                        # 与下面 ports 右侧、healthcheck 一致
     #   database: { host: postgres, port: 5432, username/password/database 同 POSTGRES_* }
-    #   redis:    { url: redis://redis:6379 }
+    #   redis:    { host: redis, port: 6379 }   # 开了 requirepass 再加 password
     environment:
       NACOS_SERVER_ADDR: ${NACOS_SERVER_ADDR}
       NACOS_NAMESPACE: ${NACOS_NAMESPACE:-public}

@@ -10,7 +10,7 @@ import {
   RedisLockProvider,
   ResponseInterceptor,
   traceIdMiddleware,
-} from "@qriter/shared";
+} from "@qriter/common";
 import type { INestApplication } from "@nestjs/common";
 import { APP_GUARD, Reflector } from "@nestjs/core";
 import { JwtModule } from "@nestjs/jwt";
@@ -41,7 +41,6 @@ const I18N_PATH = path.join(__dirname, "..", "..", "i18n");
 
 /** e2e 测试用最小 AppConfig —— jwt.secret 必须与下面 JwtModule.register 的 secret 一致。 */
 const TEST_CONFIG: AppConfig = {
-  node_env: "test",
   port: 3000,
   database: {
     type: "postgres",

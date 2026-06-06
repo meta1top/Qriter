@@ -1,4 +1,4 @@
-import { TxTypeOrmModule } from "@qriter/shared";
+import { TxTypeOrmModule } from "@qriter/common";
 import { Module } from "@nestjs/common";
 
 import { Book } from "./entities/book.entity";

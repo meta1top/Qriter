@@ -42,7 +42,7 @@ class RedisLifecycle implements OnModuleDestroy {
 }
 
 /**
- * 全局 Redis 模块 —— 从 `APP_CONFIG.redis` 读连接串构建 `REDIS_CLIENT` 并导出。
+ * 全局 Redis 模块 —— 从 `APP_CONFIG.redis`（host/port/db/password）构建 `REDIS_CLIENT` 并导出。
  * 供锁 / 缓存 / 限流 / 健康检查共享。
  */
 @Global()
@@ -52,10 +52,14 @@ class RedisLifecycle implements OnModuleDestroy {
       provide: REDIS_CLIENT,
       inject: [APP_CONFIG],
       useFactory: (config: AppConfig): Redis | null => {
-        const url = config.redis?.url;
-        if (!url) return null;
-        // 启动失败让 server 整体 fail-fast，不悄悄退化到 memory
-        const redis = new Redis(url, {
+        const r = config.redis;
+        if (!r) return null;
+        // host / port / db / password 离散字段构造；启动失败让 server fail-fast，不悄悄退化到 memory
+        const redis = new Redis({
+          host: r.host,
+          port: r.port,
+          db: r.db,
+          password: r.password,
           maxRetriesPerRequest: 3,
           lazyConnect: false,
         });

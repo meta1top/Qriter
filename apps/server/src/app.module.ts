@@ -10,7 +10,7 @@ import {
   RedisCacheProvider,
   RedisHealthIndicator,
   RedisLockProvider,
-} from "@qriter/shared";
+} from "@qriter/common";
 import { type DynamicModule, Module } from "@nestjs/common";
 import { APP_GUARD } from "@nestjs/core";
 import { EventEmitterModule } from "@nestjs/event-emitter";
@@ -53,7 +53,8 @@ import { HealthGateway } from "./ws/health.gateway";
 @Module({})
 export class AppModule {
   static forRoot(config: AppConfig): DynamicModule {
-    const isProd = config.node_env === "production";
+    // 运行模式取自 NODE_ENV（部署环境身份），不取自 Nacos 配置。
+    const isProd = process.env.NODE_ENV === "production";
     return {
       module: AppModule,
       imports: [

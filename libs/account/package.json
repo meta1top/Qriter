@@ -12,6 +12,7 @@
     "test": "jest --config ../../jest.config.ts --roots libs/account"
   },
   "dependencies": {
+    "@qriter/common": "workspace:*",
     "@qriter/shared": "workspace:*",
     "@qriter/types": "workspace:*",
     "bcrypt": "^6.0.0",

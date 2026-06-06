@@ -10,7 +10,7 @@
     "typecheck": "tsc --project tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@qriter/common": "workspace:*",
+    "@qriter/web-common": "workspace:*",
     "@qriter/design": "workspace:*",
     "@qriter/types": "workspace:*",
     "@hookform/resolvers": "^5",

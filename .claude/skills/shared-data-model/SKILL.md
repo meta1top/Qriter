@@ -1,6 +1,6 @@
 ---
 name: shared-data-model
-description: "前后端共享数据模型 — types schema、业务 DTO、Entity 分层 Use when files matching libs/types/**,libs/**/src/dto/**,apps/**/src/rest/**,packages/common/**/types/** change, or when explicitly invoked."
+description: "前后端共享数据模型 — types schema、业务 DTO、Entity 分层 Use when files matching libs/types/**,libs/**/src/dto/**,apps/**/src/rest/**,packages/web-common/**/types/** change, or when explicitly invoked."
 ---
 
 # 共享数据模型（类型包 + 业务模块）

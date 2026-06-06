@@ -26,6 +26,7 @@
     {
       "includes": [
         "apps/server/**",
+        "libs/common/**",
         "libs/shared/**",
         "libs/agent/**",
         "libs/book/**",

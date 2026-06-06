@@ -1,12 +1,12 @@
 "use client";
 
-import { apiClient, setAccessToken } from "@qriter/common";
 import type {
   Account,
   AuthResponse,
   LoginInput,
   RegisterInput,
 } from "@qriter/types";
+import { apiClient, setAccessToken } from "@qriter/web-common";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSetAtom } from "jotai";
 import { accessTokenAtom, currentUserAtom } from "@/atoms/auth";

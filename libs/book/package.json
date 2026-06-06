@@ -12,6 +12,7 @@
     "test": "jest --config ../../jest.config.ts --roots libs/book"
   },
   "dependencies": {
+    "@qriter/common": "workspace:*",
     "@qriter/shared": "workspace:*",
     "@qriter/types": "workspace:*",
     "nanoid": "^5"

@@ -3,9 +3,10 @@
 最小可用的 docker-compose 编排：`postgres + redis + server`。
 适用于单机部署 / 小规模生产 / 演示环境。多机集群 / 高可用 / k8s 后续再推。
 
-**配置模型**：server 的业务配置（`node_env` / `port` / `database` / `jwt` / `redis` / `llm`）
+**配置模型**：server 的业务配置（`port` / `database` / `jwt` / `redis` / `llm`）
 全部来自 **Nacos**（一个 dataId，内容为 YAML）。容器只给 server `NACOS_*` 连接信息——
-环境变量最小化。本地无 Nacos 时 server 会回退读 `apps/server/config/application.yml`（仅 dev）。
+环境变量最小化。运行模式（dev/prod）不在 Nacos，由镜像里 `NODE_ENV=production` 决定。
+本地无 Nacos 时 server 会回退读 `apps/server/config/application.yml`（仅 dev）。
 
 ## 起动
 
@@ -43,7 +44,7 @@ curl http://localhost:3000/api/health
 与本 compose 拓扑对齐的最小配置（`POSTGRES_*` 须与 `database.*` 一致）：
 
 ```yaml
-node_env: production
+# 运行模式不在这里 —— 由镜像 NODE_ENV=production 决定
 port: 3000                 # 与 SERVER_PORT 右侧映射、healthcheck 一致
 database:
   type: postgres
@@ -58,10 +59,15 @@ jwt:
   secret: <openssl rand -base64 48>
   expires: 7d
 redis:
-  url: redis://redis:6379  # compose 服务名
-# llm:                     # 可选，agent 模型凭证
-#   provider: openai
-#   model: gpt-4o-mini
+  host: redis              # compose 服务名（容器网络内）
+  port: 6379
+  db: 0
+  # password: <若 redis 开了 requirepass 则填同一个>
+# llm:                     # 可选，agent 模型凭证（provider: anthropic / openai / deepseek）
+#   provider: deepseek
+#   model: deepseek-chat
+#   apiKey: sk-...
+#   baseUrl: https://api.deepseek.com
 #   apiKey: sk-...
 ```
 

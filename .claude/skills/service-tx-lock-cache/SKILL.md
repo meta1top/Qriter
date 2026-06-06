@@ -5,7 +5,7 @@ description: "Service 层缓存、事务、分布式锁使用规范 — @Cacheab
 
 # 缓存 / 事务 / 分布式锁使用规范
 
-`@qriter/shared`（`libs/shared`）提供三个装饰器，**只能用在 Service 层方法上**（不可用于 Controller、Processor）。
+`@qriter/common`（`libs/common`）提供三个装饰器，**只能用在 Service 层方法上**（不可用于 Controller、Processor）。
 
 > **qriter 状态**：分布式锁 / 缓存底层由 `LockProvider` / `CacheProvider` 抽象。`REDIS_URL` 未设置时走内存实现（async-mutex / lru-cache）；设置后走 Redis 实现。下文行文沿用 "Redis" 表述时，理解为对应的 Provider 实现即可。
 
@@ -78,7 +78,7 @@ async findBySlug(slug: string): Promise<Book | null> { ... }
 ### 使用条件
 
 - `@Transactional()` 方法所在 Service 必须注入至少一个 TypeORM Repository（装饰器通过反射获取 DataSource）
-- **唯一合法来源是 `@qriter/shared`**——其他来源（如 `typeorm-transactional`）会装饰失效，事务名存实亡
+- **唯一合法来源是 `@qriter/common`**——其他来源（如 `typeorm-transactional`）会装饰失效，事务名存实亡
 
 ### 跨 Service 事务传播
 
@@ -102,7 +102,7 @@ async createBookWithFirstChapter(input) {
 使用 `TxTypeOrmModule.forFeature()` 替代 `TypeOrmModule.forFeature()`：
 
 ```ts
-import { TxTypeOrmModule } from '@qriter/shared';
+import { TxTypeOrmModule } from '@qriter/common';
 
 @Module({
   imports: [TxTypeOrmModule.forFeature([Book, Chapter])],

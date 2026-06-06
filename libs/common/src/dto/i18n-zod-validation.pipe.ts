@@ -7,7 +7,7 @@ import {
 import { I18nContext, type I18nService } from "nestjs-i18n";
 import type { ZodIssue } from "zod";
 
-import type { ZodDtoClass } from "./create-zod-dto";
+import type { ZodDtoClass } from "@qriter/shared";
 
 /**
  * Zod DTO 校验 + i18n 翻译桥。

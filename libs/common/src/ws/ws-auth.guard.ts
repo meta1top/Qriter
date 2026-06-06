@@ -6,8 +6,8 @@ import {
 import { WsException } from "@nestjs/websockets";
 import type { Socket } from "socket.io";
 
-import { AppError } from "../errors/app.error";
-import { CommonErrorCode } from "../errors/common.error-codes";
+import { AppError } from "@qriter/shared";
+import { CommonErrorCode } from "@qriter/shared";
 
 /**
  * WebSocket 鉴权 Guard —— Phase 6 D1。

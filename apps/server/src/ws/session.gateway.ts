@@ -2,7 +2,7 @@ import {
   BaseWebSocketGateway,
   WsAuthGuard,
   WsExceptionFilter,
-} from "@qriter/shared";
+} from "@qriter/common";
 import {
   AGENT_WS_EVENTS,
   AGENT_WS_NAMESPACE,

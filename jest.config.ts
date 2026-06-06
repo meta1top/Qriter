@@ -16,6 +16,8 @@ const config: Config = {
   moduleNameMapper: {
     "^@qriter/shared$": "<rootDir>/libs/shared/src",
     "^@qriter/shared/(.*)$": "<rootDir>/libs/shared/src/$1",
+    "^@qriter/common$": "<rootDir>/libs/common/src",
+    "^@qriter/common/(.*)$": "<rootDir>/libs/common/src/$1",
     "^@qriter/types$": "<rootDir>/libs/types/src",
     "^@qriter/types/(.*)$": "<rootDir>/libs/types/src/$1",
     "^@qriter/account$": "<rootDir>/libs/account/src",

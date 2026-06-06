@@ -9,7 +9,7 @@ import {
 import { Reflector } from "@nestjs/core";
 import { map, type Observable } from "rxjs";
 
-import { CommonErrorCode } from "../errors/common.error-codes";
+import { CommonErrorCode } from "@qriter/shared";
 
 /** 跳过 ResponseInterceptor 包装的元数据标记 */
 export const SKIP_RESPONSE_ENVELOPE = Symbol("SKIP_RESPONSE_ENVELOPE");

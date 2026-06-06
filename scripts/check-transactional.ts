@@ -4,7 +4,7 @@
  *
  * 检查 3 类问题：
  *   A. MISSING       — 方法体内 ≥2 处写动作但未挂 @Transactional()
- *   B. WRONG_IMPORT  — @Transactional 导入来源 ≠ @qriter/shared
+ *   B. WRONG_IMPORT  — @Transactional 导入来源 ≠ @qriter/common
  *   D. REDUNDANT     — 挂了 @Transactional() 但写动作 ≤1（事务无意义）
  *
  * 用法：
@@ -49,7 +49,7 @@ import { collectTsFiles } from "./lib/ts-files";
 
 const ROOT = path.resolve(__dirname, "..");
 
-const ALLOWED_TX_IMPORT = "@qriter/shared";
+const ALLOWED_TX_IMPORT = "@qriter/common";
 
 const WRITE_REPO_METHODS = new Set([
   "save",
@@ -156,8 +156,8 @@ const DATASOURCE_IDENT_REGEX = /datasource$/i;
  * 这些文件是事务体系自身的实现，不应被业务侧规则拦截。
  */
 const BYPASS_INFRA_WHITELIST = new Set<string>([
-  "libs/shared/src/typeorm/tx-typeorm.module.ts",
-  "libs/shared/src/decorators/transactional.decorator.ts",
+  "libs/common/src/typeorm/tx-typeorm.module.ts",
+  "libs/common/src/decorators/transactional.decorator.ts",
 ]);
 
 const RAW_SQL_WRITE_KEYWORDS =

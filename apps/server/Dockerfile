@@ -65,8 +65,9 @@ RUN cp -r /repo/apps/server/dist /out/dist \
 # ============ Stage 3: runtime ============================================
 FROM node:22-alpine AS runtime
 WORKDIR /app
-# NODE_ENV 仅作容器约定（部分依赖按它优化）；app 的运行模式取自 Nacos 配置 node_env。
-# 不再设 PORT —— server 监听 config.port（须为 3000，与 EXPOSE / healthcheck 一致）。
+# NODE_ENV 决定 app 运行模式（isProd → 不自动迁移 / 不挂 Swagger），prod 镜像烤 production；
+# 部分依赖也按它优化。运行模式是「部署环境身份」，不放 Nacos 业务配置。
+# 不设 PORT —— server 监听 config.port（须为 3000，与 EXPOSE / healthcheck 一致）。
 ENV NODE_ENV=production
 
 # 仅 copy deploy 产物，根 monorepo 不进 runtime

@@ -12,7 +12,7 @@
 
 | 脚本 | pnpm 命令 | 用途 |
 |------|-----------|------|
-| `check-transactional.ts` | `pnpm check:tx` | 校验 `@Transactional` 完整性（跨表写入是否挂；导入是否来自 `@qriter/shared`；是否冗余；是否绕过 Proxy） |
+| `check-transactional.ts` | `pnpm check:tx` | 校验 `@Transactional` 完整性（跨表写入是否挂；导入是否来自 `@qriter/common`；是否冗余；是否绕过 Proxy） |
 | `check-method-naming.ts` | `pnpm check:naming` | 校验事务方法命名约定（`*InDb` / `*InTx` / `*InTransaction` / `persist*`）与 `@Transactional()` 是否一致 |
 | `check-lock-tx.ts` | `pnpm check:lock-tx` | 校验事务-锁倒置漏洞（`@WithLock` 不可在 `@Transactional` 内层；装饰器顺序 / 调用链） |
 | `check-repo-access.ts` | `pnpm check:repo` | 校验 Entity 唯一归属 Service + 非 Service 注入 Repository + 跨 libs 边界注入限制 |

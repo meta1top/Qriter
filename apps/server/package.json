@@ -15,6 +15,7 @@
     "@qriter/account": "workspace:^",
     "@qriter/agent": "workspace:^",
     "@qriter/book": "workspace:^",
+    "@qriter/common": "workspace:*",
     "@qriter/shared": "workspace:*",
     "@qriter/types": "workspace:*",
     "@nest-lab/throttler-storage-redis": "^1.2.0",
