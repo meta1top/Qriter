@@ -29,6 +29,7 @@ import request from "supertest";
 
 import { JwtAuthGuard } from "../../src/auth/jwt-auth.guard";
 import { JwtStrategy } from "../../src/auth/jwt.strategy";
+import { GoogleOAuthService } from "../../src/auth/google-oauth.service";
 import { type AppConfig, APP_CONFIG } from "../../src/config/app-config.schema";
 import { AuthController } from "../../src/rest/auth.controller";
 import {
@@ -149,6 +150,7 @@ describe.each<[Mode]>([
         { provide: APP_CONFIG, useValue: TEST_CONFIG },
         JwtStrategy,
         { provide: APP_GUARD, useClass: JwtAuthGuard },
+        GoogleOAuthService,
       ],
     }).compile();
 
