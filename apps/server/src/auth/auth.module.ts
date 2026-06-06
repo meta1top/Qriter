@@ -4,6 +4,7 @@ import { JwtModule, type JwtModuleOptions } from "@nestjs/jwt";
 import { PassportModule } from "@nestjs/passport";
 
 import { type AppConfig, APP_CONFIG } from "../config/app-config.schema";
+import { GoogleOAuthService } from "./google-oauth.service";
 import { JwtStrategy } from "./jwt.strategy";
 
 /**
@@ -28,7 +29,7 @@ import { JwtStrategy } from "./jwt.strategy";
     }),
     AccountModule,
   ],
-  providers: [JwtStrategy],
-  exports: [JwtModule, PassportModule, AccountModule],
+  providers: [JwtStrategy, GoogleOAuthService],
+  exports: [JwtModule, PassportModule, AccountModule, GoogleOAuthService],
 })
 export class AuthModule {}
