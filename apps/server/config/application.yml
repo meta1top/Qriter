@@ -40,3 +40,12 @@ jwt:
 #   model: deepseek-chat
 #   apiKey: sk-...
 #   baseUrl: https://api.deepseek.com   # 可选；deepseek/openai 兼容端点的自定义地址
+
+# Google OAuth（可选）—— 真实 clientId/clientSecret 写进 application.local.yml（已 gitignore）。
+# redirectUri 须为合法 URL，故整块注释，避免空字符串触发 z.string().url() 校验失败。
+# oauth:
+#   google:
+#     clientId: ""
+#     clientSecret: ""
+#     redirectUri: http://localhost:3001/auth/google
+#     scopes: [openid, email, profile]

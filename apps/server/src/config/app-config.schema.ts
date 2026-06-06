@@ -56,6 +56,19 @@ export const LlmConfigSchema = z.object({
   baseUrl: z.string().optional(),
 });
 
+/** Google OAuth 配置（可选）。未配置则谷歌登录端点抛 GOOGLE_OAUTH_FAILED。 */
+export const GoogleOAuthConfigSchema = z.object({
+  clientId: z.string(),
+  clientSecret: z.string(),
+  /** = 前端回调页地址，如 http://localhost:3001/auth/google。 */
+  redirectUri: z.string().url(),
+  scopes: z.array(z.string()).default(["openid", "email", "profile"]),
+});
+
+export const OAuthConfigSchema = z.object({
+  google: GoogleOAuthConfigSchema,
+});
+
 /**
  * qriter server 应用配置 —— 由 YAML / Nacos 加载成「多层级对象」，经本 schema 校验。
  *
@@ -71,6 +84,7 @@ export const AppConfigSchema = z.object({
   jwt: JwtConfigSchema,
   redis: RedisConfigSchema.optional(),
   llm: LlmConfigSchema.optional(),
+  oauth: OAuthConfigSchema.optional(),
 });
 
 export type AppConfig = z.infer<typeof AppConfigSchema>;
@@ -78,6 +92,7 @@ export type DatabaseConfig = z.infer<typeof DatabaseConfigSchema>;
 export type JwtConfig = z.infer<typeof JwtConfigSchema>;
 export type RedisConfig = z.infer<typeof RedisConfigSchema>;
 export type LlmConfig = z.infer<typeof LlmConfigSchema>;
+export type GoogleOAuthConfig = z.infer<typeof GoogleOAuthConfigSchema>;
 
 /**
  * 全局 DI token —— 持有「强类型嵌套 AppConfig」。
