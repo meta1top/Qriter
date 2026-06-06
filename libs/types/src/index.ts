@@ -3,6 +3,8 @@ export {
   AccountSchema,
   type AuthResponse,
   AuthResponseSchema,
+  type GoogleCodeInput,
+  GoogleCodeSchema,
   type LoginInput,
   LoginSchema,
   type RegisterInput,

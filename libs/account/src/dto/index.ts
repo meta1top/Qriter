@@ -1,6 +1,9 @@
 import { createI18nZodDto } from "@qriter/shared";
 import {
+  AccountSchema,
   AuthResponseSchema,
+  type GoogleCodeInput,
+  GoogleCodeSchema,
   type LoginInput,
   LoginSchema,
   type RegisterInput,
@@ -31,3 +34,10 @@ export interface LoginDto extends LoginInput {}
  * （登录 / 注册成功的 data 形态：accessToken + 账号档案）。不做请求校验，无需 interface 合并。
  */
 export class AuthResponseDto extends createI18nZodDto(AuthResponseSchema) {}
+
+// biome-ignore lint/suspicious/noUnsafeDeclarationMerging: intentional class+interface merge to expose zod-inferred fields
+export class GoogleCodeDto extends createI18nZodDto(GoogleCodeSchema) {}
+export interface GoogleCodeDto extends GoogleCodeInput {}
+
+/** 账号公开档案 DTO —— 仅供 Swagger 声明 @ApiOkResponse 的 type。 */
+export class AccountDto extends createI18nZodDto(AccountSchema) {}

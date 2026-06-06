@@ -50,3 +50,11 @@ export const AuthResponseSchema = z.object({
 });
 
 export type AuthResponse = z.infer<typeof AuthResponseSchema>;
+
+/** 谷歌回调换 code 请求体：授权码 + CSRF state。 */
+export const GoogleCodeSchema = z.object({
+  code: z.string().min(1, { message: "validation.required" }),
+  state: z.string().min(1, { message: "validation.required" }),
+});
+
+export type GoogleCodeInput = z.infer<typeof GoogleCodeSchema>;
