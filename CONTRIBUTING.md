@@ -10,7 +10,7 @@
 
 ```bash
 pnpm install --frozen-lockfile
-docker compose -f infra/dev/docker-compose.dev.yml up -d                # 起本地 Postgres + Redis（docker-compose）
+docker compose -f infra/test/docker-compose.test.yml up -d                # 起本地 Postgres + Redis（docker-compose）
 pnpm migration run            # 跑数据库迁移
 pnpm dev                      # 启动 server + web（turbo dev）
 ```
@@ -32,7 +32,7 @@ pnpm dev:web                  # :3001，Next.js 前端
 
 ```bash
 pnpm install --frozen-lockfile
-docker compose -f infra/dev/docker-compose.dev.yml up -d
+docker compose -f infra/test/docker-compose.test.yml up -d
 pnpm lint
 pnpm typecheck
 pnpm check:strict             # 严格模式（CI 用）；本地 pnpm check 走 baseline 增量
@@ -87,7 +87,7 @@ pnpm build
 ## 常见问题
 
 - **pre-commit 卡 sync:locales --check**：先 `pnpm sync:locales -- --write` 补占位，再人工填中英文译文
-- **e2e 测试找不到 Postgres**：`docker compose -f infra/dev/docker-compose.dev.yml up -d` 起本地 Postgres；端口冲突改 `infra/dev/docker-compose.dev.yml` 端口映射
+- **e2e 测试找不到 Postgres**：`docker compose -f infra/test/docker-compose.test.yml up -d` 起本地 Postgres；端口冲突改 `infra/test/docker-compose.test.yml` 端口映射
 
 ## License
 

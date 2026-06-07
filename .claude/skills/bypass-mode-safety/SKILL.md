@@ -167,7 +167,7 @@ git add -A && git commit -m "wip: claude-baseline-<task-name>"
 修改以下文件视同 **影响生产部署**，即使本地修改也要主动告知用户：
 
 - `.github/workflows/*.yml`
-- `Dockerfile` / `docker-compose*.yml`（含 `infra/dev/docker-compose.dev.yml`、`infra/prod/docker-compose.prod.yml`）
+- `Dockerfile` / `docker-compose*.yml`（含 `infra/test/docker-compose.test.yml`、`infra/prod/docker-compose.prod.yml`）
 - `nginx*.conf`
 - 本地配置文件（已 gitignored 的 `.env.*` / `infra/prod/.env.prod`）
 

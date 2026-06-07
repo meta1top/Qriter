@@ -48,7 +48,7 @@ infra/
 pnpm install
 
 # 启动本地依赖（Postgres + Redis）
-docker compose -f infra/dev/docker-compose.dev.yml up -d
+docker compose -f infra/test/docker-compose.test.yml up -d
 
 # 跑数据库迁移
 pnpm migration run
@@ -72,7 +72,7 @@ pnpm build
 
 ```bash
 pnpm install --frozen-lockfile
-docker compose -f infra/dev/docker-compose.dev.yml up -d                       # e2e 依赖 Postgres
+docker compose -f infra/test/docker-compose.test.yml up -d                       # e2e 依赖 Postgres
 pnpm lint                            # Biome
 pnpm typecheck                       # 全包 TS 类型检查
 pnpm check:strict                    # 6 围栏（CI 用 strict；本地 pnpm check 走 baseline 增量亦可）
@@ -98,7 +98,7 @@ husky pre-commit 已自动跑 Biome（lint-staged） + 6 围栏（`check:paralle
 
 - **架构与规约**：[`.claude/CLAUDE.md`](.claude/CLAUDE.md)
 - **贡献指南**：[`CONTRIBUTING.md`](CONTRIBUTING.md)
-- **本地开发依赖**：[`infra/dev/README.md`](infra/dev/README.md)
+- **e2e/测试依赖**：[`infra/test/README.md`](infra/test/README.md)
 - **生产部署**：[`infra/prod/README.md`](infra/prod/README.md)
 
 ## License

@@ -4,11 +4,11 @@
 # - 仅 e2e 用：dev 运行 / migration 的 DB 走 Nacos，不需要本地库
 # - server 配置见 apps/server/conf/application.yml（database.host=localhost、port=5433）
 # - Redis 可选：application.yml 的 redis.url（默认注释掉 → memory 兜底）；本地宿主端口 6380
-# 详见 infra/dev/README.md
+# 详见 infra/test/README.md
 services:
   postgres:
     image: postgres:16-alpine
-    container_name: qriter-dev-postgres
+    container_name: qriter-test-postgres
     restart: unless-stopped
     environment:
       POSTGRES_USER: qriter
@@ -18,7 +18,7 @@ services:
       # 宿主映射 5433（避免与本机其它项目的 postgres 5432 冲突）；容器内仍 5432
       - "5433:5432"
     volumes:
-      - qriter-dev-postgres-data:/var/lib/postgresql/data
+      - qriter-test-postgres-data:/var/lib/postgresql/data
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U qriter -d qriter"]
       interval: 5s
@@ -27,13 +27,13 @@ services:
 
   redis:
     image: redis:7-alpine
-    container_name: qriter-dev-redis
+    container_name: qriter-test-redis
     restart: unless-stopped
     ports:
       # 宿主映射 6380（避免与本机其它项目的 redis 6379 冲突）；容器内仍 6379
       - "6380:6379"
     volumes:
-      - qriter-dev-redis-data:/data
+      - qriter-test-redis-data:/data
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 5s
@@ -41,5 +41,5 @@ services:
       retries: 5
 
 volumes:
-  qriter-dev-postgres-data:
-  qriter-dev-redis-data:
+  qriter-test-postgres-data:
+  qriter-test-redis-data:

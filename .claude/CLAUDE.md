@@ -13,7 +13,7 @@ qriter 是一个**基于 Agent 的写作平台**：单后端（NestJS）+ 单前
 | `pnpm dev:server` | 后端（NestJS watch，端口 3000，全局前缀 `api`，dev 挂 Swagger 于 `/api/docs`） |
 | `pnpm dev:web` | 前端（Next.js，端口 3001） |
 | `pnpm dev` | 同时启动 server + web（Turbo） |
-| `docker compose -f infra/dev/docker-compose.dev.yml up -d` | 起本地一次性 Postgres+Redis（**仅 e2e 用**；dev/migration 的 DB 走 Nacos 配置，不需要本地库）。停/清卷/日志见 `infra/dev/README.md` |
+| `docker compose -f infra/test/docker-compose.test.yml up -d` | 起本地一次性 Postgres+Redis（**仅 e2e 用**；dev/migration 的 DB 走 Nacos 配置，不需要本地库）。停/清卷/日志见 `infra/test/README.md` |
 
 ### 构建与测试
 
@@ -74,8 +74,8 @@ packages/
 └── design/     Tailwind + shadcn/Radix UI 组件库，别名 @qriter/design
 
 infra/
-├── dev/       本地开发依赖（docker-compose Postgres + Redis）
-└── prod/      生产形态 docker-compose 编排
+├── test/      e2e/测试依赖（一次性 docker-compose Postgres + Redis；dev/migration 走 Nacos）
+└── prod/      生产形态 docker-compose 编排（app + Postgres + Redis）
 ```
 
 ## 依赖方向法
