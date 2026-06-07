@@ -10,7 +10,8 @@ export function BrandPanel() {
   const t = useTranslations("auth");
   return (
     <aside
-      className="relative flex flex-col justify-center gap-3 p-10 text-[#3a2f25] md:w-[44%]"
+      aria-label="Qriter"
+      className="flex flex-col justify-center gap-3 p-10 text-[#3a2f25] md:w-[44%]"
       style={{
         background:
           "linear-gradient(155deg, #efe6d8 0%, #caa07e 75%, #b5654a 120%)",
