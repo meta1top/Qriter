@@ -35,21 +35,21 @@ function GoogleCallback() {
   }, [params, router, setCurrentUser]);
 
   return (
-    <main className="flex min-h-screen items-center justify-center p-6 text-sm text-muted-foreground">
+    <div className="flex flex-col items-center gap-3 text-sm text-muted-foreground">
       {error ? (
-        <div className="flex flex-col items-center gap-3">
+        <>
           <span>{t("loginFailed")}</span>
           <a className="underline" href="/login">
             {t("backToLogin")}
           </a>
-        </div>
+        </>
       ) : (
         <div className="flex items-center gap-2">
           <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-          <span>{t("submitting")}</span>
+          <span>{t("loggingIn")}</span>
         </div>
       )}
-    </main>
+    </div>
   );
 }
 
