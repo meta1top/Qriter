@@ -6,7 +6,7 @@
 **配置模型**：server 的业务配置（`port` / `database` / `jwt` / `redis` / `llm`）
 全部来自 **Nacos**（一个 dataId，内容为 YAML）。容器只给 server `NACOS_*` 连接信息——
 环境变量最小化。运行模式（dev/prod）不在 Nacos，由镜像里 `NODE_ENV=production` 决定。
-本地无 Nacos 时 server 会回退读 `apps/server/config/application.yml`（仅 dev）。
+本地无 Nacos 时 server 会回退读 `apps/server/conf/application.yml`（仅 dev）。
 
 ## 起动
 

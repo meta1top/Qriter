@@ -36,7 +36,7 @@ services:
       - "6381:6379"   # 改宿主端口（容器内仍 6379）
 ```
 
-同步在 `apps/server/config/application.local.yml`（个人覆盖，已 gitignore）改对应端口：
+同步在 `apps/server/conf/application.local.yml`（个人覆盖，已 gitignore）改对应端口：
 
 ```yaml
 database:

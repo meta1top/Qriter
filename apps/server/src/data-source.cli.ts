@@ -26,7 +26,7 @@ const MigrationConfigSchema = z.object({ database: DatabaseConfigSchema });
 export default loadAppConfig(MigrationConfigSchema, {
   cwd: APP_ROOT,
   envFiles: [".env"],
-  yamlFiles: ["config/application.yml", "config/application.local.yml"],
+  yamlFiles: ["conf/application.yml", "conf/application.local.yml"],
 }).then(({ database }) => {
   // autoLoadEntities 是 @nestjs/typeorm 专属项，原生 DataSource 不认；剥掉，用显式 entities glob。
   const { autoLoadEntities: _autoLoad, ...dbOptions } = database;

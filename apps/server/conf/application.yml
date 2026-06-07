@@ -1,6 +1,6 @@
 # qriter server 本地开发配置（提交，含 localhost 默认值，pnpm dev 开箱即用）。
 # 部署环境在 .env 配置 NACOS_SERVER_ADDR 后，本文件不会被读取（loader 走 Nacos 分支）。
-# 个人覆盖：把要改的项写进 config/application.local.yml（已 gitignore）。
+# 个人覆盖：把要改的项写进 conf/application.local.yml（已 gitignore）。
 #
 # 配置为「多层级对象」，由 AppModule.forRoot(config) 分发：
 #   database 整块透传给 TypeORM；jwt → 鉴权；redis → 锁/缓存/限流。

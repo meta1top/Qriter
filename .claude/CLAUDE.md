@@ -124,7 +124,7 @@ infra/
 
 ### 配置（Nacos / application.yml，环境变量最小化）
 
-- **配置源**：业务配置（`port` / `database` / `jwt` / `redis` / `llm`）是**多层级对象**，来自 **Nacos**（一个 dataId，内容为 YAML）。本地开发无 Nacos 时回退读 `apps/server/config/application.yml`（个人覆盖写 `application.local.yml`，已 gitignore）。
+- **配置源**：业务配置（`port` / `database` / `jwt` / `redis` / `llm`）是**多层级对象**，来自 **Nacos**（一个 dataId，内容为 YAML）。本地开发无 Nacos 时回退读 `apps/server/conf/application.yml`（个人覆盖写 `application.local.yml`，已 gitignore）。
 - **运行模式不进 Nacos**：dev/prod 是「部署环境身份」而非业务配置，`isProd` 取自 `process.env.NODE_ENV`（prod 镜像烤 `production`、本地不设=dev、jest=test），不放配置中心（避免与 NODE_ENV 两份来源打架）。
 - **环境变量只放 Nacos 连接**：`NACOS_SERVER_ADDR` / `NACOS_NAMESPACE` / `NACOS_GROUP` / `NACOS_DATA_ID` / `NACOS_USERNAME` / `NACOS_PASSWORD`（写 `apps/server/.env`，见 `.env.example`）。**不再有** `DATABASE_URL` / `JWT_SECRET` 等扁平 env。
 - **加载链路**：`main.ts` 在 Nest 生命周期外调 `loadAppConfig(AppConfigSchema, …)`（`@qriter/common`，async）→ 校验后的强类型 `AppConfig` → `AppModule.forRoot(config)` 把切片分发给各模块：`TypeOrmModule.forRoot(config.database)`、`RedisModule`（读 `config.redis`）、`AuthModule`（读 `config.jwt`）、agent（`config.database` 拼 checkpointer 连接串、`config.llm` 绑 `LLM_OPTIONS`）。全局 `APP_CONFIG` token 供任意 service 注入按需取用。**不用 `@nestjs/config`**。

@@ -24,7 +24,7 @@ next-env.d.ts
 !.env.*.example
 
 # 本地配置个人覆盖（application.yml 提交默认值，.local 覆盖不入库）
-apps/server/config/application.local.yml
+apps/server/conf/application.local.yml
 
 # editor
 .vscode/*

@@ -16,7 +16,7 @@ async function bootstrap() {
   const config = await loadAppConfig(AppConfigSchema, {
     cwd: process.cwd(),
     envFiles: [".env"],
-    yamlFiles: ["config/application.yml", "config/application.local.yml"],
+    yamlFiles: ["conf/application.yml", "conf/application.local.yml"],
   });
 
   // 再经 AppModule.forRoot(config) 把各切片分发给对应模块（TypeORM / Redis / JWT…）。

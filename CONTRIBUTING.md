@@ -15,7 +15,7 @@ pnpm migration run            # 跑数据库迁移
 pnpm dev                      # 启动 server + web（turbo dev）
 ```
 
-> 本地开发**不需要环境变量**：配置默认读 `apps/server/config/application.yml`（个人覆盖写 `application.local.yml`）。部署走 Nacos，只配 `NACOS_*`（见 `apps/server/.env.example` 与 `infra/prod/README.md`）。
+> 本地开发**不需要环境变量**：配置默认读 `apps/server/conf/application.yml`（个人覆盖写 `application.local.yml`）。部署走 Nacos，只配 `NACOS_*`（见 `apps/server/.env.example` 与 `infra/prod/README.md`）。
 
 按需启动单个 app：
 

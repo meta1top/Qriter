@@ -64,7 +64,7 @@ pnpm dev
 pnpm build
 ```
 
-> **配置**：本地开发**无需任何环境变量** —— 配置默认读 `apps/server/config/application.yml`（已含 localhost 默认值）。部署时只配 `NACOS_*` 连接信息（见 `apps/server/.env.example`），业务配置（`database` / `jwt` / `redis` / `llm`）全从 Nacos 拉取。详见 `infra/prod/README.md`。
+> **配置**：本地开发**无需任何环境变量** —— 配置默认读 `apps/server/conf/application.yml`（已含 localhost 默认值）。部署时只配 `NACOS_*` 连接信息（见 `apps/server/.env.example`），业务配置（`database` / `jwt` / `redis` / `llm`）全从 Nacos 拉取。详见 `infra/prod/README.md`。
 
 ## 本地复刻 CI
 
