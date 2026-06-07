@@ -19,7 +19,8 @@
     "submit": "Sign in",
     "submitting": "Signing in…",
     "loginFailed": "Login failed, please check your email and password",
-    "signInWithGoogle": "Sign in with Google"
+    "signInWithGoogle": "Sign in with Google",
+    "backToLogin": "Back to sign in"
   },
   "validation": {
     "required": "This field is required",

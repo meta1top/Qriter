@@ -19,7 +19,8 @@
     "submit": "登录",
     "submitting": "登录中…",
     "loginFailed": "登录失败，请检查邮箱与密码",
-    "signInWithGoogle": "使用 Google 登录"
+    "signInWithGoogle": "使用 Google 登录",
+    "backToLogin": "返回登录"
   },
   "validation": {
     "required": "此项为必填",
