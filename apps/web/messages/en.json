@@ -18,7 +18,8 @@
     "password": "Password",
     "submit": "Sign in",
     "submitting": "Signing in…",
-    "loginFailed": "Login failed, please check your email and password"
+    "loginFailed": "Login failed, please check your email and password",
+    "signInWithGoogle": "Sign in with Google"
   },
   "validation": {
     "required": "This field is required",

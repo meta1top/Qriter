@@ -74,6 +74,17 @@ export default function LoginPage() {
             >
               {loginMutation.isPending ? t("submitting") : t("submit")}
             </Button>
+
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full"
+              onClick={() => {
+                window.location.href = "/api/auth/google";
+              }}
+            >
+              {t("signInWithGoogle")}
+            </Button>
           </Form>
         </CardContent>
       </Card>
