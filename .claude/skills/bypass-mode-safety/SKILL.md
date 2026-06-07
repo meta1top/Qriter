@@ -132,7 +132,7 @@ git add -A && git commit -m "wip: claude-baseline-<task-name>"
 
 - `rm -rf node_modules/` / `rm -rf .next/` / `rm -rf dist/` / `rm -rf .turbo/` —— 公认安全，可以执行
 - 其他 gitignored 路径删除前先问，特别是：
-  - `.env*` 系列（用户可能本地有未 commit 的密钥，含 `infra/prod/.env.prod`）
+  - `.env*` 系列（用户可能本地有未 commit 的密钥，含 `apps/server/.env.prod` / `apps/web/.env.prod`）
   - 本地克隆的外部源码仓库（如果有）
 
 ## 6. Git 重写历史 / 强制操作
@@ -167,9 +167,9 @@ git add -A && git commit -m "wip: claude-baseline-<task-name>"
 修改以下文件视同 **影响生产部署**，即使本地修改也要主动告知用户：
 
 - `.github/workflows/*.yml`
-- `Dockerfile` / `docker-compose*.yml`（含 `infra/test/docker-compose.test.yml`、`infra/prod/docker-compose.prod.yml`）
+- `Dockerfile` / `docker-compose*.yml`（含 `apps/server/{Dockerfile,docker-compose.yml}`、`apps/web/{Dockerfile,docker-compose.yml}`、`infra/test/docker-compose.test.yml`）
 - `nginx*.conf`
-- 本地配置文件（已 gitignored 的 `.env.*` / `infra/prod/.env.prod`）
+- 本地配置文件（已 gitignored 的 `.env.*` / `apps/server/.env.prod` / `apps/web/.env.prod`）
 
 修改完后 **不要主动 push**，让用户 review 后自己 push。
 

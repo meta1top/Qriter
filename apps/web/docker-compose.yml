@@ -1,0 +1,26 @@
+# qriter web 生产部署（仅 web）。
+#
+# web 通过 NEST_INTERNAL_URL 访问 Nest server（proxy.ts 转发 /api/* + SSR 取 profile）。
+# server / pg / redis 都在别处独立部署，本 compose 只起 web 一个服务。
+#
+# 用法（在 apps/web/ 下）：
+#   cp .env.prod.example .env.prod     # 填 NEST_INTERNAL_URL 指向 server 实际地址
+#   docker compose --env-file .env.prod up -d --build
+#   docker compose logs -f web
+#
+# 镜像构建 context 是 repo root（monorepo），Dockerfile 在 apps/web/Dockerfile。
+
+services:
+  web:
+    build:
+      context: ../..
+      dockerfile: apps/web/Dockerfile
+    image: qriter/web:latest
+    container_name: qriter-web
+    restart: unless-stopped
+    environment:
+      # Nest server 内网地址（服务端 fetch + proxy 转发用）；指向 server 实际可达地址。
+      NEST_INTERNAL_URL: ${NEST_INTERNAL_URL}
+    ports:
+      - "${WEB_PORT:-3001}:3001"
+    # healthcheck 已在 Dockerfile（/login）

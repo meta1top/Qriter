@@ -1,6 +1,6 @@
 # qriter e2e / 测试依赖（test infra）
 
-一次性的本地 Postgres + Redis，**给 e2e 用**（e2e 在其中建/删一次性 `test_*` schema，不该指向真库）。生产部署见 `infra/prod/`。
+一次性的本地 Postgres + Redis，**给 e2e 用**（e2e 在其中建/删一次性 `test_*` schema，不该指向真库）。生产部署见 `apps/server/DEPLOY.md` / `apps/web/DEPLOY.md`。
 
 > **为什么不叫 dev**：dev 运行 / `pnpm migration run` 的数据库连接走 **Nacos**（或 `conf/application.yml` 回退），不需要本地库；原 `pnpm dev:db:*` 脚本已移除。这套容器现仅服务测试，故归 `infra/test/`。直接用 docker compose 起停：
 

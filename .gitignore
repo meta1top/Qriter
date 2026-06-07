@@ -21,6 +21,7 @@ next-env.d.ts
 .env.*.local
 .env.development
 .env.production
+.env.prod
 !.env.*.example
 
 # 本地配置个人覆盖（application.yml 提交默认值，.local 覆盖不入库）

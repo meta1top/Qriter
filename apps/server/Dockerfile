@@ -12,6 +12,7 @@
 #     -e NACOS_DATA_ID=qriter-server.yaml \
 #     qriter/server:local
 # （database / jwt / redis / llm / port 全在 Nacos 的 dataId 里。）
+# 一键编排（含 env-file）见 apps/server/docker-compose.yml；部署说明见 apps/server/DEPLOY.md。
 
 # ============ Stage 1: deps ===============================================
 FROM node:22-alpine AS deps

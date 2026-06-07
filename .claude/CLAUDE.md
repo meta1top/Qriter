@@ -74,9 +74,10 @@ packages/
 └── design/     Tailwind + shadcn/Radix UI 组件库，别名 @qriter/design
 
 infra/
-├── test/      e2e/测试依赖（一次性 docker-compose Postgres + Redis；dev/migration 走 Nacos）
-└── prod/      生产形态 docker-compose 编排（app + Postgres + Redis）
+└── test/      e2e/测试依赖（一次性 docker-compose Postgres + Redis；dev/migration 走 Nacos）
 ```
+
+> **部署**：server / web 各自独立部署，Dockerfile + compose 放各自工程下（`apps/server/{Dockerfile,docker-compose.yml,DEPLOY.md}`、`apps/web/{Dockerfile,docker-compose.yml,DEPLOY.md}`）。pg/redis/Nacos 外部托管，不进 compose；server 经 Nacos `database.host`/`redis.host` 连接，web 经 `NEST_INTERNAL_URL` 访问 server。
 
 ## 依赖方向法
 

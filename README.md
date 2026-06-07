@@ -64,7 +64,7 @@ pnpm dev
 pnpm build
 ```
 
-> **配置**：本地开发**无需任何环境变量** —— 配置默认读 `apps/server/conf/application.yml`（已含 localhost 默认值）。部署时只配 `NACOS_*` 连接信息（见 `apps/server/.env.example`），业务配置（`database` / `jwt` / `redis` / `llm`）全从 Nacos 拉取。详见 `infra/prod/README.md`。
+> **配置**：本地开发**无需任何环境变量** —— 配置默认读 `apps/server/conf/application.yml`（已含 localhost 默认值）。部署时只配 `NACOS_*` 连接信息（见 `apps/server/.env.example`），业务配置（`database` / `jwt` / `redis` / `llm`）全从 Nacos 拉取。部署详见 `apps/server/DEPLOY.md` / `apps/web/DEPLOY.md`。
 
 ## 本地复刻 CI
 
@@ -99,7 +99,7 @@ husky pre-commit 已自动跑 Biome（lint-staged） + 6 围栏（`check:paralle
 - **架构与规约**：[`.claude/CLAUDE.md`](.claude/CLAUDE.md)
 - **贡献指南**：[`CONTRIBUTING.md`](CONTRIBUTING.md)
 - **e2e/测试依赖**：[`infra/test/README.md`](infra/test/README.md)
-- **生产部署**：[`infra/prod/README.md`](infra/prod/README.md)
+- **生产部署**：[`apps/server/DEPLOY.md`](apps/server/DEPLOY.md) · [`apps/web/DEPLOY.md`](apps/web/DEPLOY.md)
 
 ## License
 

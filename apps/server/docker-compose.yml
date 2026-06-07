@@ -1,0 +1,34 @@
+# qriter server 生产部署（仅 server）。
+#
+# Postgres / Redis / Nacos 均为外部托管，不在此 compose —— server 经 Nacos 配置里的
+# database.host / redis.host 指向它们。业务配置（database / jwt / redis / llm / port）
+# 全在 Nacos 的 dataId，容器只吃 NACOS_* 连接信息（见 apps/server/DEPLOY.md）。
+#
+# 用法（在 apps/server/ 下）：
+#   cp .env.prod.example .env.prod     # 填 NACOS_*
+#   docker compose --env-file .env.prod up -d --build
+#   docker compose logs -f server
+#
+# 镜像构建 context 是 repo root（monorepo），Dockerfile 在 apps/server/Dockerfile。
+
+services:
+  server:
+    build:
+      context: ../..
+      dockerfile: apps/server/Dockerfile
+    image: qriter/server:latest
+    container_name: qriter-server
+    restart: unless-stopped
+    # server 只吃 Nacos 连接；database/jwt/redis/llm/port 全在 Nacos dataId。
+    # 运行模式由镜像 NODE_ENV=production 决定（不放 Nacos）。
+    environment:
+      NACOS_SERVER_ADDR: ${NACOS_SERVER_ADDR}
+      NACOS_NAMESPACE: ${NACOS_NAMESPACE:-public}
+      NACOS_GROUP: ${NACOS_GROUP:-DEFAULT_GROUP}
+      NACOS_DATA_ID: ${NACOS_DATA_ID:-qriter-server.yaml}
+      NACOS_USERNAME: ${NACOS_USERNAME}
+      NACOS_PASSWORD: ${NACOS_PASSWORD}
+    ports:
+      # host 暴露端口须与 Nacos 配置 port 一致（默认 3000）
+      - "${SERVER_PORT:-3000}:3000"
+    # healthcheck 已在 Dockerfile（/api/health）
