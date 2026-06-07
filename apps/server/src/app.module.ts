@@ -39,6 +39,7 @@ import type { AppConfig } from "./config/app-config.schema";
 import { HealthController } from "./health.controller";
 import { REDIS_CLIENT, RedisModule } from "./redis.module";
 import { AuthController } from "./rest/auth.controller";
+import { BookController } from "./rest/book.controller";
 import { HealthGateway } from "./ws/health.gateway";
 
 /**
@@ -124,7 +125,7 @@ export class AppModule {
         BookModule,
         AgentModule,
       ],
-      controllers: [HealthController, AuthController],
+      controllers: [HealthController, AuthController, BookController],
       providers: [
         RedisHealthIndicator,
         HealthGateway,
