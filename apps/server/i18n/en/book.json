@@ -1,0 +1,5 @@
+{
+  "notFound": "Book not found",
+  "chapterNotFound": "Chapter not found",
+  "forbidden": "You do not have access to this book"
+}

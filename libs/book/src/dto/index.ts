@@ -1,5 +1,6 @@
 import { createI18nZodDto } from "@qriter/shared";
 import {
+  BookSchema,
   type CreateBookInput,
   CreateBookSchema,
   type CreateChapterInput,
@@ -36,3 +37,9 @@ export interface CreateChapterDto extends CreateChapterInput {}
 // biome-ignore lint/suspicious/noUnsafeDeclarationMerging: intentional class+interface merge to expose zod-inferred fields
 export class UpdateChapterDto extends createI18nZodDto(UpdateChapterSchema) {}
 export interface UpdateChapterDto extends UpdateChapterInput {}
+
+/**
+ * 书籍公开形态的响应 DTO —— 仅供 Swagger `@ApiOkResponse({ type: BookDto })` 标注，
+ * 不参与请求校验。沿用 AccountDto 的裸 class 模式（无需 interface 合并暴露字段）。
+ */
+export class BookDto extends createI18nZodDto(BookSchema) {}

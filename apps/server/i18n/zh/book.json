@@ -1,0 +1,5 @@
+{
+  "notFound": "书籍不存在",
+  "chapterNotFound": "章节不存在",
+  "forbidden": "无权访问该书籍"
+}
