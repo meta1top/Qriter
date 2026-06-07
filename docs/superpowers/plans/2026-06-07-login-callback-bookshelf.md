@@ -581,7 +581,7 @@ describe.each<[Mode]>([["memory"], ["redis"]])(
 
 - [ ] **Step 3: 起依赖 + 跑 e2e**
 
-Run: `pnpm dev:db:up && pnpm --filter @qriter/server test -- book.spec`
+Run: `pnpm dev:db:up && pnpm test -- book.spec  # 根 jest（apps/server 无 test script）`
 Expected: BookController e2e 全绿（memory + redis 两组；若本机 redis/pg 不可达则相应组 skip 而非 fail）。
 
 - [ ] **Step 4: Commit**
@@ -1967,7 +1967,7 @@ Expected: 全包类型通过；6 个围栏 0 finding（check:repo 确认 BookCon
 
 - [ ] **Step 3: 后端 e2e（确认 BookController 行为）**
 
-Run: `pnpm dev:db:up && pnpm --filter @qriter/server test -- book.spec`
+Run: `pnpm dev:db:up && pnpm test -- book.spec  # 根 jest（apps/server 无 test script）`
 Expected: book e2e 全绿（pg/redis 不可达则相应组 skip）。
 
 - [ ] **Step 4: 前端构建冒烟**
