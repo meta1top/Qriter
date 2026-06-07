@@ -20,12 +20,57 @@
     "submitting": "登录中…",
     "loginFailed": "登录失败，请检查邮箱与密码",
     "signInWithGoogle": "使用 Google 登录",
-    "backToLogin": "返回登录"
+    "backToLogin": "返回登录",
+    "brandSlogan": "落笔之前，先与 agent 聊聊。",
+    "loggingIn": "登录中…"
   },
   "validation": {
     "required": "此项为必填",
     "invalidEmail": "邮箱格式不正确",
     "passwordTooShort": "密码至少 8 位",
     "stringTooLong": "内容过长"
+  },
+  "shelf": {
+    "title": "我的书架",
+    "newBook": "新建书籍",
+    "empty": "还没有书，开始你的第一本",
+    "createFirst": "创建第一本书",
+    "loadFailed": "加载书籍失败",
+    "updatedAt": "更新于 {time}"
+  },
+  "book": {
+    "status": { "draft": "草稿", "writing": "写作中", "done": "完结" },
+    "open": "打开",
+    "edit": "编辑",
+    "delete": "删除",
+    "titleLabel": "书名",
+    "titlePlaceholder": "起一个书名",
+    "descriptionLabel": "简介",
+    "descriptionPlaceholder": "一句话简介（可选）",
+    "statusLabel": "状态",
+    "createTitle": "新建书籍",
+    "editTitle": "编辑书籍",
+    "save": "保存",
+    "cancel": "取消",
+    "saving": "保存中…",
+    "deleteTitle": "删除《{title}》？",
+    "deleteConfirm": "删除后无法恢复，确认删除？",
+    "confirmDelete": "确认删除",
+    "created": "已创建",
+    "updated": "已更新",
+    "deleted": "已删除",
+    "saveFailed": "保存失败",
+    "deleteFailed": "删除失败"
+  },
+  "account": {
+    "stats": "统计",
+    "modelSettings": "模型设置",
+    "accountSettings": "账号设置",
+    "logout": "退出登录"
+  },
+  "workspace": {
+    "comingSoon": "工作台建设中",
+    "backToShelf": "返回书架",
+    "notFound": "书籍不存在或无权访问"
   }
 }

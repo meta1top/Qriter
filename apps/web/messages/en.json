@@ -20,12 +20,57 @@
     "submitting": "Signing in…",
     "loginFailed": "Login failed, please check your email and password",
     "signInWithGoogle": "Sign in with Google",
-    "backToLogin": "Back to sign in"
+    "backToLogin": "Back to sign in",
+    "brandSlogan": "Before you write, talk it over with your agent.",
+    "loggingIn": "Signing in…"
   },
   "validation": {
     "required": "This field is required",
     "invalidEmail": "Invalid email address",
     "passwordTooShort": "Password must be at least 8 characters",
     "stringTooLong": "Content is too long"
+  },
+  "shelf": {
+    "title": "My Bookshelf",
+    "newBook": "New book",
+    "empty": "No books yet — start your first",
+    "createFirst": "Create your first book",
+    "loadFailed": "Failed to load books",
+    "updatedAt": "Updated {time}"
+  },
+  "book": {
+    "status": { "draft": "Draft", "writing": "Writing", "done": "Done" },
+    "open": "Open",
+    "edit": "Edit",
+    "delete": "Delete",
+    "titleLabel": "Title",
+    "titlePlaceholder": "Name your book",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "One-line description (optional)",
+    "statusLabel": "Status",
+    "createTitle": "New book",
+    "editTitle": "Edit book",
+    "save": "Save",
+    "cancel": "Cancel",
+    "saving": "Saving…",
+    "deleteTitle": "Delete \"{title}\"?",
+    "deleteConfirm": "This cannot be undone. Delete anyway?",
+    "confirmDelete": "Delete",
+    "created": "Created",
+    "updated": "Updated",
+    "deleted": "Deleted",
+    "saveFailed": "Save failed",
+    "deleteFailed": "Delete failed"
+  },
+  "account": {
+    "stats": "Stats",
+    "modelSettings": "Model settings",
+    "accountSettings": "Account settings",
+    "logout": "Log out"
+  },
+  "workspace": {
+    "comingSoon": "Workspace coming soon",
+    "backToShelf": "Back to bookshelf",
+    "notFound": "Book not found or access denied"
   }
 }
