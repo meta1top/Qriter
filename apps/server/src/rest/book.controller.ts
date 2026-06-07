@@ -10,11 +10,13 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
   Param,
   Patch,
   Post,
 } from "@nestjs/common";
 import {
+  ApiBearerAuth,
   ApiCreatedResponse,
   ApiOkResponse,
   ApiOperation,
@@ -32,10 +34,12 @@ import {
  * 写动作（改 / 删）先 `assertOwner` 校验归属，非本人书抛 BOOK_FORBIDDEN(403)。
  */
 @ApiTags("books")
+@ApiBearerAuth("jwt")
 @Controller("books")
 export class BookController {
   constructor(private readonly books: BookService) {}
 
+  /** 列出当前登录账号拥有的全部书籍（按更新时间倒序，投影为公开形态）。 */
   @ApiOperation({ summary: "列出当前账号的全部书籍（按更新时间倒序）" })
   @ApiOkResponse({ description: "我的书籍列表", type: [BookDto] })
   @Get()
@@ -44,9 +48,11 @@ export class BookController {
     return books.map((book) => this.books.toProfile(book));
   }
 
+  /** 新建书籍（归当前账号，仅书本身、0 章；首章由工作台创建）。 */
   @ApiOperation({ summary: "新建书籍（仅书本身，0 章；首章在工作台创建）" })
   @ApiCreatedResponse({ description: "新建的书籍", type: BookDto })
   @Post()
+  @HttpCode(201)
   async create(
     @CurrentUser() user: CurrentUserPayload,
     @Body() dto: CreateBookDto,
@@ -55,6 +61,7 @@ export class BookController {
     return this.books.toProfile(book);
   }
 
+  /** 更新书籍 title / description / status —— 先校验归属，非本人书抛 BOOK_FORBIDDEN。 */
   @ApiOperation({ summary: "更新书籍 title / description / status" })
   @ApiOkResponse({ description: "更新后的书籍", type: BookDto })
   @Patch(":id")
@@ -68,6 +75,7 @@ export class BookController {
     return this.books.toProfile(book);
   }
 
+  /** 删除书籍及其全部章节 —— 先校验归属，非本人书抛 BOOK_FORBIDDEN。 */
   @ApiOperation({ summary: "删除书籍及其全部章节" })
   @ApiOkResponse({ description: "删除成功" })
   @Delete(":id")
