@@ -36,6 +36,8 @@
     "lucide-react": "^0.468",
     "radix-ui": "^1.4.3",
     "react-hook-form": "^7",
+    "react-resizable-panels": "^4.11.2",
+    "sonner": "^2.0.7",
     "tailwind-merge": "^3",
     "tw-animate-css": "^1"
   },
