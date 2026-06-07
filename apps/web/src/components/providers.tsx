@@ -3,7 +3,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Provider as JotaiProvider } from "jotai";
 import { useState } from "react";
-import { AuthGuard } from "@/components/auth-guard";
 
 function createQueryClient() {
   return new QueryClient({
@@ -23,9 +22,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <JotaiProvider>
-        <AuthGuard>{children}</AuthGuard>
-      </JotaiProvider>
+      <JotaiProvider>{children}</JotaiProvider>
     </QueryClientProvider>
   );
 }
