@@ -16,7 +16,7 @@ const COOKIE_ROUTES = new Set([
  * 透明代理：把 /api/* 转发到 Nest，并把 httpOnly cookie 里的 JWT 翻译成
  * Authorization: Bearer。302（GET /api/auth/google）与流式响应原样回流。
  */
-export function proxy(request: NextRequest): NextResponse {
+export function middleware(request: NextRequest): NextResponse {
   const { pathname, search } = request.nextUrl;
   if (COOKIE_ROUTES.has(pathname)) return NextResponse.next();
 
