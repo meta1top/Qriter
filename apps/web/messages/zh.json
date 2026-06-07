@@ -67,7 +67,9 @@
     "stats": "统计",
     "modelSettings": "模型设置",
     "accountSettings": "账号设置",
-    "logout": "退出登录"
+    "logout": "退出登录",
+    "menu": "账号菜单",
+    "comingSoon": "建设中"
   },
   "workspace": {
     "comingSoon": "工作台建设中",

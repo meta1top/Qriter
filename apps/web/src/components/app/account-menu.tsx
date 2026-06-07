@@ -28,7 +28,11 @@ export function AccountMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button type="button" className="rounded-full outline-none">
+        <button
+          type="button"
+          aria-label={t("menu")}
+          className="rounded-full outline-none"
+        >
           <Avatar>
             <AvatarFallback>{initial}</AvatarFallback>
           </Avatar>

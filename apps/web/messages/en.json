@@ -67,7 +67,9 @@
     "stats": "Stats",
     "modelSettings": "Model settings",
     "accountSettings": "Account settings",
-    "logout": "Log out"
+    "logout": "Log out",
+    "menu": "Account menu",
+    "comingSoon": "Coming soon"
   },
   "workspace": {
     "comingSoon": "Workspace coming soon",
