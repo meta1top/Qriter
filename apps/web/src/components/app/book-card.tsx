@@ -64,8 +64,9 @@ export function BookCard({
           <DropdownMenuTrigger asChild>
             <button
               type="button"
+              aria-label={t("bookActions", { title: book.title })}
               onClick={(e) => e.stopPropagation()}
-              className="rounded p-1 text-muted-foreground opacity-0 transition group-hover:opacity-100"
+              className="rounded p-1 text-muted-foreground opacity-0 transition group-hover:opacity-100 focus-visible:opacity-100"
             >
               ⋯
             </button>

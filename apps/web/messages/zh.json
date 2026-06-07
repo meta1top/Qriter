@@ -43,6 +43,7 @@
     "open": "打开",
     "edit": "编辑",
     "delete": "删除",
+    "bookActions": "《{title}》操作",
     "titleLabel": "书名",
     "titlePlaceholder": "起一个书名",
     "descriptionLabel": "简介",

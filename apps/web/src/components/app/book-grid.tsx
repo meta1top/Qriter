@@ -10,6 +10,9 @@ import { BookCard } from "./book-card";
 import { BookDeleteDialog } from "./book-delete-dialog";
 import { BookFormDialog } from "./book-form-dialog";
 
+/** 自适应书卡网格的列布局（骨架与列表共用）。 */
+const GRID_CLASS = "grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-4";
+
 /** 书架主区域：书籍网格 + 新建卡 + 空态 + 骨架 + 弹窗编排。 */
 export function BookGrid() {
   const t = useTranslations("shelf");
@@ -31,7 +34,7 @@ export function BookGrid() {
 
   if (isLoading) {
     return (
-      <div className="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-4">
+      <div className={GRID_CLASS}>
         {[0, 1, 2, 3].map((i) => (
           <Skeleton key={i} className="h-44 rounded-xl" />
         ))}
@@ -59,7 +62,7 @@ export function BookGrid() {
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-4">
+        <div className={GRID_CLASS}>
           {list.map((book) => (
             <BookCard
               key={book.id}

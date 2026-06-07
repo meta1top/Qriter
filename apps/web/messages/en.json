@@ -43,6 +43,7 @@
     "open": "Open",
     "edit": "Edit",
     "delete": "Delete",
+    "bookActions": "Actions for {title}",
     "titleLabel": "Title",
     "titlePlaceholder": "Name your book",
     "descriptionLabel": "Description",
