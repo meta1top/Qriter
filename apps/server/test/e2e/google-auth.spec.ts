@@ -89,7 +89,8 @@ describe("server google-auth e2e", () => {
   beforeAll(async () => {
     const pgOk = await isPostgresReachable();
     if (!pgOk) {
-      skipReason = "Postgres unreachable; run `pnpm dev:db:up`";
+      skipReason =
+        "Postgres unreachable; run `docker compose -f infra/dev/docker-compose.dev.yml up -d`";
       console.warn(`[google-auth] ${skipReason}`);
       return;
     }

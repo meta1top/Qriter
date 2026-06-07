@@ -2,13 +2,15 @@
 
 仅供本地开发使用。生产部署见 `infra/prod/`。
 
+> **用途收窄**：`pnpm dev:db:*` 脚本已移除 —— dev 运行 / `pnpm migration run` 的数据库连接走 **Nacos**（或 `conf/application.yml` 回退），不需要本地库。这套一次性 Postgres+Redis 现**仅给 e2e 用**（e2e 在其中建/删一次性 `test_*` schema，不该指向真库）。直接用 docker compose 起停：
+
 ## 起停
 
 ```bash
-pnpm dev:db:up       # 启动 postgres + redis（后台）
-pnpm dev:db:logs     # 跟随 postgres 日志
-pnpm dev:db:down     # 停止（保留数据）
-pnpm dev:db:reset    # 停止并清空 volume（破坏数据）
+docker compose -f infra/dev/docker-compose.dev.yml up -d             # 启动 postgres + redis（后台）
+docker compose -f infra/dev/docker-compose.dev.yml logs -f postgres  # 跟随 postgres 日志
+docker compose -f infra/dev/docker-compose.dev.yml down              # 停止（保留数据）
+docker compose -f infra/dev/docker-compose.dev.yml down -v           # 停止并清空 volume（破坏数据）
 ```
 
 ## 默认连接
@@ -56,8 +58,8 @@ docker inspect qriter-dev-redis    --format='{{.State.Health.Status}}'
 
 ## 数据存放
 
-- `qriter-dev-postgres-data` volume：Postgres 数据，`dev:db:reset` 会清空
-- `qriter-dev-redis-data` volume：Redis AOF/RDB，`dev:db:reset` 会清空
+- `qriter-dev-postgres-data` volume：Postgres 数据，`down -v` 会清空
+- `qriter-dev-redis-data` volume：Redis AOF/RDB，`down -v` 会清空
 
 ## Redis 是否必需
 

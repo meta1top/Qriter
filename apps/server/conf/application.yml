@@ -26,7 +26,7 @@ jwt:
   secret: qriter-dev-secret-change-in-prod-min-16
   expires: 7d
 
-# Redis：留空（整块注释掉）走 memory 兜底；本地起 redis（pnpm dev:db:up，端口 6380）后再启用。
+# Redis：留空（整块注释掉）走 memory 兜底；本地起 redis（docker compose -f infra/dev/docker-compose.dev.yml up -d，端口 6380）后再启用。
 # host / port / db / password 离散字段；db 默认 0，password 不填则无鉴权。
 # redis:
 #   host: localhost

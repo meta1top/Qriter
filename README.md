@@ -48,7 +48,7 @@ infra/
 pnpm install
 
 # 启动本地依赖（Postgres + Redis）
-pnpm dev:db:up
+docker compose -f infra/dev/docker-compose.dev.yml up -d
 
 # 跑数据库迁移
 pnpm migration run
@@ -72,7 +72,7 @@ pnpm build
 
 ```bash
 pnpm install --frozen-lockfile
-pnpm dev:db:up                       # e2e 依赖 Postgres
+docker compose -f infra/dev/docker-compose.dev.yml up -d                       # e2e 依赖 Postgres
 pnpm lint                            # Biome
 pnpm typecheck                       # 全包 TS 类型检查
 pnpm check:strict                    # 6 围栏（CI 用 strict；本地 pnpm check 走 baseline 增量亦可）

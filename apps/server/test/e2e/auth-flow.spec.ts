@@ -110,14 +110,15 @@ describe.each<[Mode]>([
   beforeAll(async () => {
     const pgOk = await isPostgresReachable();
     if (!pgOk) {
-      skipReason = "Postgres unreachable; run `pnpm dev:db:up`";
+      skipReason =
+        "Postgres unreachable; run `docker compose -f infra/dev/docker-compose.dev.yml up -d`";
       console.warn(`[auth-flow:${mode}] ${skipReason}`);
       return;
     }
     if (mode === "redis") {
       const redisOk = await isRedisReachable();
       if (!redisOk) {
-        skipReason = `Redis unreachable at ${REDIS_URL}; run 'pnpm dev:db:up'（含 redis 服务）`;
+        skipReason = `Redis unreachable at ${REDIS_URL}; run 'docker compose -f infra/dev/docker-compose.dev.yml up -d'（含 redis 服务）`;
         console.warn(`[auth-flow:${mode}] ${skipReason}`);
         return;
       }

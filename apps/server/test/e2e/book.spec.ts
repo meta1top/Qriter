@@ -111,14 +111,15 @@ describe.each<[Mode]>([
   beforeAll(async () => {
     const pgOk = await isPostgresReachable();
     if (!pgOk) {
-      skipReason = "Postgres unreachable; run `pnpm dev:db:up`";
+      skipReason =
+        "Postgres unreachable; run `docker compose -f infra/dev/docker-compose.dev.yml up -d`";
       console.warn(`[book:${mode}] ${skipReason}`);
       return;
     }
     if (mode === "redis") {
       const redisOk = await isRedisReachable();
       if (!redisOk) {
-        skipReason = `Redis unreachable at ${REDIS_URL}; run 'pnpm dev:db:up'`;
+        skipReason = `Redis unreachable at ${REDIS_URL}; run 'docker compose -f infra/dev/docker-compose.dev.yml up -d'`;
         console.warn(`[book:${mode}] ${skipReason}`);
         return;
       }
