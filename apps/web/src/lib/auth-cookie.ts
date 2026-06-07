@@ -17,12 +17,28 @@ export async function proxyAndSetCookie(
     headers: { "content-type": "application/json" },
     body: JSON.stringify(body),
   });
-  const json = (await upstream.json()) as {
+  type UpstreamJson = {
     success?: boolean;
     data?: { accessToken: string; user: unknown };
   };
-  if (!upstream.ok || json?.success === false || !json?.data?.accessToken) {
-    return NextResponse.json(json, { status: upstream.status || 401 });
+  let json: UpstreamJson | null = null;
+  try {
+    json = (await upstream.json()) as UpstreamJson;
+  } catch {
+    json = null;
+  }
+  if (
+    !upstream.ok ||
+    !json ||
+    json.success === false ||
+    !json.data?.accessToken
+  ) {
+    return NextResponse.json(
+      json ?? { success: false, message: "upstream error" },
+      {
+        status: upstream.status,
+      },
+    );
   }
   const res = NextResponse.json({ user: json.data.user });
   res.cookies.set({

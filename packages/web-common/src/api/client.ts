@@ -62,7 +62,7 @@ export function createApiClient(baseURL?: string): AxiosInstance {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
         if (typeof window !== "undefined") {
           const currentPath = window.location.pathname;
-          if (currentPath !== "/login") {
+          if (currentPath !== "/login" && currentPath !== "/auth/google") {
             window.location.href = "/login";
           }
         }
