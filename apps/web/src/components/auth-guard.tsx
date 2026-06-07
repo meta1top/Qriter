@@ -1,49 +1,43 @@
 "use client";
 
-import { useAtomValue } from "jotai";
+import { useQuery } from "@tanstack/react-query";
+import { useSetAtom } from "jotai";
 import { usePathname, useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
-import { useEffect, useState } from "react";
-import { isAuthenticatedAtom } from "@/atoms/auth";
+import { useEffect } from "react";
+import { currentUserAtom } from "@/atoms/auth";
+import { fetchProfile, profileQueryKey } from "@/rest/auth";
 
-/** 公开路由 —— 未登录也可访问，不触发跳转。 */
-const PUBLIC_PATHS = new Set(["/login"]);
+/** 公开路由：未登录可访问。/auth/google 是 OAuth 回调页，禁跑 profile 查询以免打断换码。 */
+const PUBLIC_PATHS = new Set(["/login", "/auth/google"]);
 
-/**
- * 启动鉴权守卫：以访问令牌是否存在判定登录态。
- *
- * 未登录访问受保护路由 → 跳 /login；已登录停留 /login → 回主页；
- * 解析期间渲染加载占位，避免内容闪烁。
- */
 export function AuthGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();
-  const isAuthenticated = useAtomValue(isAuthenticatedAtom);
   const t = useTranslations("common");
-  const [resolved, setResolved] = useState(false);
+  const setCurrentUser = useSetAtom(currentUserAtom);
+  const isPublic = PUBLIC_PATHS.has(pathname);
+
+  const { data, isLoading, isError } = useQuery({
+    queryKey: profileQueryKey,
+    queryFn: fetchProfile,
+    retry: false,
+    staleTime: 60_000,
+    enabled: pathname !== "/auth/google",
+  });
 
   useEffect(() => {
-    const isPublic = PUBLIC_PATHS.has(pathname);
+    if (data) setCurrentUser(data);
+  }, [data, setCurrentUser]);
 
-    if (!isAuthenticated && !isPublic) {
-      setResolved(false);
-      router.replace("/login");
-      return;
-    }
+  useEffect(() => {
+    if (isLoading) return;
+    const authed = !!data && !isError;
+    if (!authed && !isPublic) router.replace("/login");
+    if (authed && pathname === "/login") router.replace("/");
+  }, [isLoading, data, isError, isPublic, pathname, router]);
 
-    if (isAuthenticated && pathname === "/login") {
-      setResolved(false);
-      router.replace("/");
-      return;
-    }
-
-    setResolved(true);
-  }, [isAuthenticated, pathname, router]);
-
-  if (!resolved) {
-    return <SplashScreen label={t("loading")} />;
-  }
-
+  if (isLoading && !isPublic) return <SplashScreen label={t("loading")} />;
   return <>{children}</>;
 }
 

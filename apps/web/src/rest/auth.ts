@@ -1,73 +1,80 @@
 "use client";
 
-import type {
-  Account,
-  AuthResponse,
-  LoginInput,
-  RegisterInput,
-} from "@qriter/types";
-import { apiClient, setAccessToken } from "@qriter/web-common";
+import type { Account, LoginInput, RegisterInput } from "@qriter/types";
+import { apiClient } from "@qriter/web-common";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSetAtom } from "jotai";
-import { accessTokenAtom, currentUserAtom } from "@/atoms/auth";
+import { currentUserAtom } from "@/atoms/auth";
 
-/** profile 查询 key —— 登录 / 注册成功后据此失效以刷新当前账号。 */
+/** profile 查询 key。 */
 export const profileQueryKey = ["auth", "profile"] as const;
 
-/** 调用登录端点，成功后落 token 并返回响应。 */
-export async function login(input: LoginInput): Promise<AuthResponse> {
-  const { data } = await apiClient.post<AuthResponse>("/api/auth/login", input);
-  setAccessToken(data.accessToken);
-  return data;
+/** 登录（cookie 由 route handler 下发，响应只含 user）。 */
+export async function login(input: LoginInput): Promise<Account> {
+  const { data } = await apiClient.post<{ user: Account }>(
+    "/api/auth/login",
+    input,
+  );
+  return data.user;
 }
 
-/** 调用注册端点，成功后落 token 并返回响应。 */
-export async function register(input: RegisterInput): Promise<AuthResponse> {
-  const { data } = await apiClient.post<AuthResponse>(
+/** 注册。 */
+export async function register(input: RegisterInput): Promise<Account> {
+  const { data } = await apiClient.post<{ user: Account }>(
     "/api/auth/register",
     input,
   );
-  setAccessToken(data.accessToken);
-  return data;
+  return data.user;
 }
 
-/** 拉取当前账号公开档案。 */
+/** 退出登录（清 cookie）。 */
+export async function logout(): Promise<void> {
+  await apiClient.post("/api/auth/logout");
+}
+
+/** 拉取当前账号档案（经 proxy → Nest，envelope 已解包）。 */
 export async function fetchProfile(): Promise<Account> {
   const { data } = await apiClient.get<Account>("/api/auth/profile");
   return data;
 }
 
-/** 登录 mutation —— 成功后写入令牌与当前账号 atom，并失效 profile 查询。 */
 export function useLogin() {
-  const queryClient = useQueryClient();
-  const setAccessTokenAtom = useSetAtom(accessTokenAtom);
+  const qc = useQueryClient();
   const setCurrentUser = useSetAtom(currentUserAtom);
   return useMutation({
     mutationFn: login,
-    onSuccess: (data) => {
-      setAccessTokenAtom(data.accessToken);
-      setCurrentUser(data.user);
-      queryClient.invalidateQueries({ queryKey: profileQueryKey });
+    onSuccess: (user) => {
+      setCurrentUser(user);
+      qc.invalidateQueries({ queryKey: profileQueryKey });
     },
   });
 }
 
-/** 注册 mutation —— 成功后写入令牌与当前账号 atom，并失效 profile 查询。 */
 export function useRegister() {
-  const queryClient = useQueryClient();
-  const setAccessTokenAtom = useSetAtom(accessTokenAtom);
+  const qc = useQueryClient();
   const setCurrentUser = useSetAtom(currentUserAtom);
   return useMutation({
     mutationFn: register,
-    onSuccess: (data) => {
-      setAccessTokenAtom(data.accessToken);
-      setCurrentUser(data.user);
-      queryClient.invalidateQueries({ queryKey: profileQueryKey });
+    onSuccess: (user) => {
+      setCurrentUser(user);
+      qc.invalidateQueries({ queryKey: profileQueryKey });
     },
   });
 }
 
-/** profile 查询 —— 仅在持有令牌时启用，作为已登录态的二次确认来源。 */
+export function useLogout() {
+  const qc = useQueryClient();
+  const setCurrentUser = useSetAtom(currentUserAtom);
+  return useMutation({
+    mutationFn: logout,
+    onSuccess: () => {
+      setCurrentUser(null);
+      qc.clear();
+      window.location.href = "/login";
+    },
+  });
+}
+
 export function useProfile(enabled: boolean) {
   return useQuery({
     queryKey: profileQueryKey,

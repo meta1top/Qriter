@@ -1,9 +1,4 @@
-import axios, {
-  type AxiosInstance,
-  type InternalAxiosRequestConfig,
-} from "axios";
-
-const TOKEN_KEY = "qriter_access_token";
+import axios, { type AxiosInstance } from "axios";
 
 const DEFAULT_API_URL = "http://127.0.0.1:3000";
 
@@ -49,22 +44,13 @@ export function unwrapEnvelope(body: unknown): unknown {
   return body;
 }
 
-/** 创建一个带认证注入与 envelope 解包拦截器的 axios 实例。 */
+/** 创建一个带 envelope 解包拦截器的 axios 实例（token 由同源 httpOnly cookie 传输）。 */
 export function createApiClient(baseURL?: string): AxiosInstance {
   const client = axios.create({
-    baseURL: baseURL ?? resolveBaseURL(),
+    baseURL: baseURL ?? "",
     timeout: 30000,
+    withCredentials: true,
     headers: { "Content-Type": "application/json" },
-  });
-
-  client.interceptors.request.use((config: InternalAxiosRequestConfig) => {
-    if (typeof window !== "undefined") {
-      const token = localStorage.getItem(TOKEN_KEY);
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-      }
-    }
-    return config;
   });
 
   client.interceptors.response.use(
@@ -75,7 +61,6 @@ export function createApiClient(baseURL?: string): AxiosInstance {
     (error) => {
       if (axios.isAxiosError(error) && error.response?.status === 401) {
         if (typeof window !== "undefined") {
-          localStorage.removeItem(TOKEN_KEY);
           const currentPath = window.location.pathname;
           if (currentPath !== "/login") {
             window.location.href = "/login";
@@ -91,18 +76,3 @@ export function createApiClient(baseURL?: string): AxiosInstance {
 
 /** 应用全局共享的默认 axios 实例。 */
 export const apiClient = createApiClient();
-
-/** 写入访问令牌到 localStorage。 */
-export function setAccessToken(token: string): void {
-  localStorage.setItem(TOKEN_KEY, token);
-}
-
-/** 清除 localStorage 中的访问令牌。 */
-export function clearAccessToken(): void {
-  localStorage.removeItem(TOKEN_KEY);
-}
-
-/** 读取 localStorage 中的访问令牌，不存在返回 null。 */
-export function getAccessToken(): string | null {
-  return localStorage.getItem(TOKEN_KEY);
-}
