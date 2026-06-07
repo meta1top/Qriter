@@ -25,6 +25,8 @@ export {
   SelectValue,
 } from "./components/apple/select";
 export { Alert, AlertDescription, AlertTitle } from "./components/ui/alert";
+export { Avatar, AvatarFallback, AvatarImage } from "./components/ui/avatar";
+export { Badge, badgeVariants } from "./components/ui/badge";
 export {
   Button as UiButton,
   type ButtonProps as UiButtonProps,
@@ -38,6 +40,18 @@ export {
   CardHeader as UiCardHeader,
   CardTitle as UiCardTitle,
 } from "./components/ui/card";
+export {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogOverlay,
+  DialogPortal,
+  DialogTitle,
+  DialogTrigger,
+} from "./components/ui/dialog";
 export {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -69,6 +83,12 @@ export { Input as UiInput } from "./components/ui/input";
 export { Label } from "./components/ui/label";
 export { Progress } from "./components/ui/progress";
 export {
+  ResizableHandle,
+  ResizablePanel,
+  ResizablePanelGroup,
+} from "./components/ui/resizable";
+export { ScrollArea, ScrollBar } from "./components/ui/scroll-area";
+export {
   Select as UiSelect,
   SelectContent as UiSelectContent,
   SelectGroup as UiSelectGroup,
@@ -80,6 +100,20 @@ export {
   SelectTrigger as UiSelectTrigger,
   SelectValue as UiSelectValue,
 } from "./components/ui/select";
+export { Separator } from "./components/ui/separator";
+export {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetFooter,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "./components/ui/sheet";
+export { Skeleton } from "./components/ui/skeleton";
+export { Toaster, toast } from "./components/ui/sonner";
+export { Tabs, TabsContent, TabsList, TabsTrigger } from "./components/ui/tabs";
 export {
   Tooltip,
   TooltipContent,
