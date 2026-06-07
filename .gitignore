@@ -36,6 +36,9 @@ apps/server/conf/application.local.yml
 # claude code 运行时
 .claude/scheduled_tasks.lock
 
+# superpowers brainstorm 可视化产物
+.superpowers/
+
 # os
 .DS_Store
 Thumbs.db
