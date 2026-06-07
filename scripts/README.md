@@ -68,6 +68,8 @@
 运行时读取 `docs/audits/<fence-name>/` 下最新的 baseline JSON 报告，
 仅在以下情况输出新报告：
 
+> **`docs/audits/` 已整体 gitignore** —— 报告是**本地 dev 产物，不进版本库**（避免日期快照无限累积，以及本地 mtime-baseline 与 CI 漂移）。CI 的硬门是 `pnpm check:strict`：**任何 finding 即 exit 1，与 baseline 无关**；增量 baseline 只是本地"仅对新增报警"的便利。要重新引入存量容忍的 ratchet，给单个 fence 加一个**不带日期的** `baseline.json`（committed、确定性）即可，别再让脚本按 mtime 选最新日期文件。
+
 - 新增 finding（baseline 里没有、本次发现的）
 - 已有 finding 内容变化（同 `file:line` 但 issue 类别 / 描述变更）
 
@@ -89,7 +91,8 @@ pnpm check:error-code -- --force-report
 ```
 
 会强制把本次完整结果写一份新 JSON 到
-`docs/audits/<fence-name>/<timestamp>.json`，下次跑就以新文件为新 baseline。
-新生成的 JSON 应当随业务代码一起 commit，作为"已审计过"的证据。
+`docs/audits/<fence-name>/<timestamp>.json`，下次本地跑就以新文件为新 baseline。
+该文件**不 commit**（`docs/audits/` 已 gitignore）；它只影响本地"只对新增报警"的体验，
+CI 一律以 `check:strict` 把关。
 
 > 注意：`--force-report` 只刷新报告，不放过新增的违规。如果本次发现违规仍会 exit 1。

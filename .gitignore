@@ -60,3 +60,6 @@ coverage/
 
 # 初始化期间的临时测绘笔记
 .planning/
+
+# 静态围栏审计报告 —— 本地 dev 产物，不进版本库（见 scripts/README.md「增量基线模式」）
+docs/audits/
