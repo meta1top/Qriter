@@ -1,14 +1,4 @@
 {
-  "common": {
-    "appTitle": "Qriter 写作平台",
-    "appDescription": "基于 Agent 的写作平台",
-    "loading": "加载中…"
-  },
-  "home": {
-    "tagline": "用 Agent 驱动你的写作",
-    "goToLogin": "前往登录",
-    "getStarted": "开始使用"
-  },
   "auth": {
     "login": "登录",
     "loginTitle": "登录账号",

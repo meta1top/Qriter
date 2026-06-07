@@ -1,14 +1,4 @@
 {
-  "common": {
-    "appTitle": "Qriter Writing Platform",
-    "appDescription": "Agent-powered writing platform",
-    "loading": "Loading…"
-  },
-  "home": {
-    "tagline": "Power your writing with agents",
-    "goToLogin": "Go to login",
-    "getStarted": "Get started"
-  },
   "auth": {
     "login": "Login",
     "loginTitle": "Sign in",
