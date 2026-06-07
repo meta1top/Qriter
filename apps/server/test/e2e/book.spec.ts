@@ -42,6 +42,7 @@ import {
 
 const I18N_PATH = path.join(__dirname, "..", "..", "i18n");
 
+/** e2e 测试用最小 AppConfig —— jwt.secret 必须与下面 JwtModule.register 的 secret 一致。 */
 const TEST_CONFIG: AppConfig = {
   port: 3000,
   database: {
@@ -277,6 +278,22 @@ describe.each<[Mode]>([
       .patch(`/api/books/${id}`)
       .set(bearer(other))
       .send({ title: "篡改" });
+    expect(res.status).toBe(403);
+    expect(res.body).toMatchObject({ success: false, code: 2002 });
+  });
+
+  it("DELETE /books/:id — 越权删他人书 403 BOOK_FORBIDDEN", async () => {
+    if (maybeSkip()) return;
+    const owner = await registerAndToken(`owner3-${mode}@test.io`);
+    const other = await registerAndToken(`other3-${mode}@test.io`);
+    const created = await request(app.getHttpServer())
+      .post("/api/books")
+      .set(bearer(owner))
+      .send({ title: "私密书2" });
+    const id = created.body.data.id as string;
+    const res = await request(app.getHttpServer())
+      .delete(`/api/books/${id}`)
+      .set(bearer(other));
     expect(res.status).toBe(403);
     expect(res.body).toMatchObject({ success: false, code: 2002 });
   });
