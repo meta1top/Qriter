@@ -10,11 +10,13 @@ function Toaster(props: ToasterProps) {
       className="toaster group"
       style={
         {
-          "--normal-bg": "var(--popover)",
+          "--normal-bg": "var(--card)",
           "--normal-text": "var(--popover-foreground)",
           "--normal-border": "var(--border)",
+          "--border-radius": "0.625rem",
         } as React.CSSProperties
       }
+      toastOptions={{ style: { boxShadow: "none" } }}
       {...props}
     />
   );
