@@ -54,11 +54,11 @@
 
 :root {
   --radius: 0.5rem;
-  --background: #f3ece1;
+  --background: #f1eae0;
   --foreground: #2b2620;
-  --card: #fffefb;
+  --card: #fffdf8;
   --card-foreground: #2b2620;
-  --popover: #fffefb;
+  --popover: #fffdf8;
   --popover-foreground: #2b2620;
   --primary: #b5654a;
   --primary-foreground: #fffefb;
@@ -72,8 +72,8 @@
   --success-foreground: #fffefb;
   --destructive: #c0432f;
   --destructive-foreground: #fffefb;
-  --border: #e8ddcb;
-  --input: #e8ddcb;
+  --border: #e6dabf;
+  --input: #e6dabf;
   --ring: #b5654a;
   --chart-1: #b5654a;
   --chart-2: #caa07e;
@@ -110,8 +110,8 @@
   --success-foreground: #1c1916;
   --destructive: #d2664f;
   --destructive-foreground: #1c1916;
-  --border: #34302a;
-  --input: #34302a;
+  --border: #322e28;
+  --input: #322e28;
   --ring: #c97a5e;
   --chart-1: #c97a5e;
   --chart-2: #d3a883;
@@ -163,4 +163,24 @@
   ::-webkit-scrollbar-corner {
     background: transparent;
   }
+}
+
+@keyframes qr-shimmer {
+  0% {
+    background-position: -150% 0;
+  }
+  100% {
+    background-position: 150% 0;
+  }
+}
+
+@utility skeleton-shimmer {
+  background-image: linear-gradient(
+    100deg,
+    color-mix(in oklab, var(--muted) 70%, var(--card)) 30%,
+    color-mix(in oklab, var(--card) 92%, white) 50%,
+    color-mix(in oklab, var(--muted) 70%, var(--card)) 70%
+  );
+  background-size: 220% 100%;
+  animation: qr-shimmer 1.5s ease-in-out infinite;
 }
