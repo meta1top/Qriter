@@ -10,7 +10,7 @@ export default function AccountSettingsStubPage() {
         {t("accountSettings")}
       </div>
       <p className="font-serif text-[20px] tracking-[0.5px] text-foreground/80">
-        coming soon
+        {t("comingSoon")}
       </p>
     </div>
   );

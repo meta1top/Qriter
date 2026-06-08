@@ -70,6 +70,7 @@ export function BookCard({
           <img
             src={coverUrl}
             alt=""
+            loading="lazy"
             className="h-full w-full object-cover transition duration-150 group-hover:brightness-[1.06]"
           />
         ) : (
@@ -88,7 +89,7 @@ export function BookCard({
         </div>
 
         {/* ⋯ 操作菜单（左上，hover/focus 显） */}
-        <div className="absolute top-1.5 left-1.5 opacity-0 transition duration-150 group-hover:opacity-100 focus-within:opacity-100">
+        <div className="absolute top-1.5 left-1.5 opacity-0 transition duration-150 group-hover:opacity-100 group-focus-within:opacity-100">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <button

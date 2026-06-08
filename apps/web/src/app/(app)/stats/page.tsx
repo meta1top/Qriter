@@ -10,7 +10,7 @@ export default function StatsStubPage() {
         {t("stats")}
       </div>
       <p className="font-serif text-[20px] tracking-[0.5px] text-foreground/80">
-        coming soon
+        {t("comingSoon")}
       </p>
     </div>
   );
