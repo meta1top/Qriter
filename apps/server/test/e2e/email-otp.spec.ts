@@ -101,6 +101,11 @@ describe.each<["memory" | "redis"]>([
   const mailer = new CapturingEmailSender();
   let redis: Redis | undefined;
 
+  // 每个用例前清空已捕获的验证码，避免 mailer.last() 读到上一用例的码（测试隔离）。
+  beforeEach(() => {
+    mailer.sent.length = 0;
+  });
+
   beforeAll(async () => {
     if (!(await isPostgresReachable())) {
       skipReason =
