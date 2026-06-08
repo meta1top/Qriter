@@ -10,8 +10,9 @@ import { BookCard } from "./book-card";
 import { BookDeleteDialog } from "./book-delete-dialog";
 import { BookFormDialog } from "./book-form-dialog";
 
-/** 自适应书卡网格的列布局（骨架与列表共用）。 */
-const GRID_CLASS = "grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-4";
+/** 自适应封面网格：窄封面多列，8pt 行列距（骨架与列表共用）。 */
+const GRID_CLASS =
+  "grid grid-cols-[repeat(auto-fill,minmax(150px,1fr))] gap-x-5 gap-y-7";
 
 /** 书架主区域：书籍网格 + 新建卡 + 空态 + 骨架 + 弹窗编排。 */
 export function BookGrid() {
@@ -35,8 +36,11 @@ export function BookGrid() {
   if (isLoading) {
     return (
       <div className={GRID_CLASS}>
-        {[0, 1, 2, 3].map((i) => (
-          <Skeleton key={i} className="h-44 rounded-xl" />
+        {[0, 1, 2, 3, 4, 5].map((i) => (
+          <div key={i} className="flex flex-col gap-2.5">
+            <Skeleton className="aspect-2/3 rounded-[4px]" />
+            <Skeleton className="h-3 w-2/3 rounded-full" />
+          </div>
         ))}
       </div>
     );
@@ -75,10 +79,10 @@ export function BookGrid() {
           <button
             type="button"
             onClick={openCreate}
-            className="flex h-44 flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-border text-muted-foreground transition hover:border-primary hover:text-primary"
+            className="flex aspect-2/3 flex-col items-center justify-center gap-2 rounded-[4px] border-2 border-dashed border-border text-muted-foreground transition hover:border-primary hover:text-primary"
           >
-            <span className="text-2xl">＋</span>
-            <span className="text-sm">{t("newBook")}</span>
+            <span className="text-2xl font-light">＋</span>
+            <span className="text-xs">{t("newBook")}</span>
           </button>
         </div>
       )}
