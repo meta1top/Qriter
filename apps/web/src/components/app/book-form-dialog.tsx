@@ -74,14 +74,17 @@ export function BookFormDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle className="font-serif">
+          <DialogTitle className="font-serif text-[18px] tracking-[0.5px]">
             {book ? t("editTitle") : t("createTitle")}
           </DialogTitle>
         </DialogHeader>
 
         <div className="flex flex-col gap-4 py-2">
           <div className="flex flex-col gap-1.5 text-sm">
-            <label htmlFor="bf-title" className="text-foreground">
+            <label
+              htmlFor="bf-title"
+              className="text-[12px] font-medium tracking-[0.3px] text-foreground/85"
+            >
               {t("titleLabel")}
             </label>
             <Input
@@ -93,7 +96,10 @@ export function BookFormDialog({
           </div>
 
           <div className="flex flex-col gap-1.5 text-sm">
-            <label htmlFor="bf-description" className="text-foreground">
+            <label
+              htmlFor="bf-description"
+              className="text-[12px] font-medium tracking-[0.3px] text-foreground/85"
+            >
               {t("descriptionLabel")}
             </label>
             <Input
@@ -106,7 +112,10 @@ export function BookFormDialog({
 
           {book ? (
             <div className="flex flex-col gap-1.5 text-sm">
-              <label htmlFor="bf-status" className="text-foreground">
+              <label
+                htmlFor="bf-status"
+                className="text-[12px] font-medium tracking-[0.3px] text-foreground/85"
+              >
                 {t("statusLabel")}
               </label>
               <Select
