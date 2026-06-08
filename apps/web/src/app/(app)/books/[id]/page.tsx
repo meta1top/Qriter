@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@qriter/design";
+import { Button, Skeleton } from "@qriter/design";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { use } from "react";
@@ -15,14 +15,18 @@ export default function WorkspaceStubPage({
   const { id } = use(params);
   const router = useRouter();
   const t = useTranslations("workspace");
-  const { data: books } = useBooks();
+  const { data: books, isLoading } = useBooks();
   const book = books?.find((b) => b.id === id);
 
   return (
-    <div className="mx-auto flex max-w-3xl flex-col items-center gap-4 px-6 py-24 text-center">
-      <h1 className="font-serif text-2xl font-semibold text-foreground">
-        {book?.title ?? t("notFound")}
-      </h1>
+    <div className="mx-auto flex max-w-3xl flex-col items-center gap-4 px-8 py-24 text-center">
+      {isLoading ? (
+        <Skeleton className="h-8 w-48 rounded-md" />
+      ) : (
+        <h1 className="font-serif text-[26px] font-semibold tracking-[0.5px] text-foreground">
+          {book?.title ?? t("notFound")}
+        </h1>
+      )}
       <p className="text-muted-foreground">{t("comingSoon")}</p>
       <Button variant="outline" onClick={() => router.push("/")}>
         ‹ {t("backToShelf")}
