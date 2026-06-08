@@ -34,7 +34,9 @@ export function AccountMenu() {
           className="rounded-full outline-none"
         >
           <Avatar>
-            <AvatarFallback>{initial}</AvatarFallback>
+            <AvatarFallback className="bg-secondary text-[13px] font-medium text-secondary-foreground">
+              {initial}
+            </AvatarFallback>
           </Avatar>
         </button>
       </DropdownMenuTrigger>
