@@ -55,4 +55,25 @@ export const AccountErrorCode = defineErrorCode({
     message: "account.googleStateInvalid",
     httpStatus: 400,
   },
+
+  /** 验证码发送过于频繁（60s 冷却内）。 */
+  EMAIL_CODE_COOLDOWN: {
+    code: 1006,
+    message: "account.emailCodeCooldown",
+    httpStatus: 429,
+  },
+
+  /** 验证码错误或已过期。 */
+  EMAIL_CODE_INVALID: {
+    code: 1007,
+    message: "account.emailCodeInvalid",
+    httpStatus: 401,
+  },
+
+  /** 验证码尝试次数过多（已作废，请重新获取）。 */
+  EMAIL_CODE_TOO_MANY_ATTEMPTS: {
+    code: 1008,
+    message: "account.emailCodeTooManyAttempts",
+    httpStatus: 429,
+  },
 });

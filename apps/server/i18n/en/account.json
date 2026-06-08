@@ -4,5 +4,8 @@
   "notFound": "Account not found",
   "googleEmailUnverified": "Google email not verified; cannot link to existing account",
   "googleOauthFailed": "Google sign-in failed, please try again",
-  "googleStateInvalid": "Sign-in request expired or invalid, please try again"
+  "googleStateInvalid": "Sign-in request expired or invalid, please try again",
+  "emailCodeCooldown": "Verification code requested too frequently, please try later",
+  "emailCodeInvalid": "Verification code is incorrect or expired",
+  "emailCodeTooManyAttempts": "Too many attempts, please request a new code"
 }
