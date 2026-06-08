@@ -1,6 +1,11 @@
 "use client";
 
-import type { Account, LoginInput, RegisterInput } from "@qriter/types";
+import type {
+  Account,
+  EmailLoginInput,
+  LoginInput,
+  RegisterInput,
+} from "@qriter/types";
 import { apiClient } from "@qriter/web-common";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useSetAtom } from "jotai";
@@ -81,5 +86,31 @@ export function useProfile(enabled: boolean) {
     queryFn: fetchProfile,
     enabled,
     retry: false,
+  });
+}
+
+/** 发送邮箱验证码（经 proxy → Nest，无 cookie）。 */
+export async function sendEmailCode(email: string): Promise<void> {
+  await apiClient.post("/api/auth/email/code", { email });
+}
+
+/** 邮箱验证码登录（cookie 由 route handler 下发，响应只含 user）。 */
+export async function emailLogin(input: EmailLoginInput): Promise<Account> {
+  const { data } = await apiClient.post<{ user: Account }>(
+    "/api/auth/email/login",
+    input,
+  );
+  return data.user;
+}
+
+export function useEmailLogin() {
+  const qc = useQueryClient();
+  const setCurrentUser = useSetAtom(currentUserAtom);
+  return useMutation({
+    mutationFn: emailLogin,
+    onSuccess: (user) => {
+      setCurrentUser(user);
+      qc.invalidateQueries({ queryKey: profileQueryKey });
+    },
   });
 }

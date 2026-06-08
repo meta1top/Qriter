@@ -10,6 +10,7 @@ const COOKIE_ROUTES = new Set([
   "/api/auth/register",
   "/api/auth/google/code",
   "/api/auth/logout",
+  "/api/auth/email/login",
 ]);
 
 /**
