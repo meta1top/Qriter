@@ -21,6 +21,7 @@
     "stringTooLong": "Content is too long"
   },
   "shelf": {
+    "eyebrow": "Bookshelf",
     "title": "My Bookshelf",
     "newBook": "New book",
     "empty": "No books yet — start your first",

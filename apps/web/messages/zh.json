@@ -21,6 +21,7 @@
     "stringTooLong": "内容过长"
   },
   "shelf": {
+    "eyebrow": "书架",
     "title": "我的书架",
     "newBook": "新建书籍",
     "empty": "还没有书，开始你的第一本",
