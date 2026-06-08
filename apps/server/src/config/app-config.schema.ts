@@ -70,6 +70,22 @@ export const OAuthConfigSchema = z.object({
 });
 
 /**
+ * 邮件发送配置（可选）—— 阿里云邮件推送 DirectMail 的 SMTP。
+ * 未配置 → 验证码走 LogEmailSender 日志兜底（本地开发用）。
+ */
+export const EmailConfigSchema = z.object({
+  host: z.string().default("smtpdm.aliyun.com"),
+  port: z.coerce.number().int().min(1).max(65535).default(465),
+  secure: z.boolean().default(true),
+  /** 发信地址（DirectMail 控制台创建的发信地址）。 */
+  user: z.string(),
+  /** SMTP 密码（DirectMail 控制台为发信地址设置）。 */
+  pass: z.string(),
+  /** From 头，可含显示名，如 "Qriter <no-reply@mail.example.com>"；默认取 user。 */
+  from: z.string().optional(),
+});
+
+/**
  * qriter server 应用配置 —— 由 YAML / Nacos 加载成「多层级对象」，经本 schema 校验。
  *
  * `loadAppConfig(AppConfigSchema, ...)` 在 Nest 生命周期外完成加载 + 校验，
@@ -85,6 +101,7 @@ export const AppConfigSchema = z.object({
   redis: RedisConfigSchema.optional(),
   llm: LlmConfigSchema.optional(),
   oauth: OAuthConfigSchema.optional(),
+  email: EmailConfigSchema.optional(),
 });
 
 export type AppConfig = z.infer<typeof AppConfigSchema>;
@@ -93,6 +110,7 @@ export type JwtConfig = z.infer<typeof JwtConfigSchema>;
 export type RedisConfig = z.infer<typeof RedisConfigSchema>;
 export type LlmConfig = z.infer<typeof LlmConfigSchema>;
 export type GoogleOAuthConfig = z.infer<typeof GoogleOAuthConfigSchema>;
+export type EmailConfig = z.infer<typeof EmailConfigSchema>;
 
 /**
  * 全局 DI token —— 持有「强类型嵌套 AppConfig」。
