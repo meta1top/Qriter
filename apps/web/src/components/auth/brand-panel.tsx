@@ -17,10 +17,10 @@ export function BrandPanel() {
           "linear-gradient(155deg, #efe6d8 0%, #caa07e 75%, #b5654a 120%)",
       }}
     >
-      <div className="font-serif text-3xl font-semibold tracking-tight">
+      <div className="font-serif text-[32px] font-semibold tracking-[1px]">
         Qriter
       </div>
-      <p className="max-w-[16rem] font-serif text-base leading-relaxed text-[#4a3d2f]">
+      <p className="mt-1 max-w-[16rem] font-serif text-[15px] leading-[1.9] text-[#4a3d2f]">
         {t("brandSlogan")}
       </p>
     </aside>

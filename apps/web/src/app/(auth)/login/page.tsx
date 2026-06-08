@@ -25,8 +25,8 @@ export default function LoginPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex flex-col gap-1">
-        <h1 className="font-serif text-2xl font-semibold tracking-tight text-foreground">
+      <div className="flex flex-col gap-1.5">
+        <h1 className="font-serif text-[26px] font-semibold tracking-[0.5px] text-foreground">
           {t("loginTitle")}
         </h1>
         <p className="text-sm text-muted-foreground">{t("loginSubtitle")}</p>
