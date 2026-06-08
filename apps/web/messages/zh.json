@@ -20,7 +20,7 @@
     "loginWithWechat": "微信扫码登录",
     "submit": "登录",
     "submitting": "登录中…",
-    "loginFailed": "登录失败，请检查邮箱与密码",
+    "loginFailed": "登录失败，请重试",
     "signInWithGoogle": "使用 Google 登录",
     "backToLogin": "返回登录",
     "brandSlogan": "落笔之前，先与 agent 聊聊。",
