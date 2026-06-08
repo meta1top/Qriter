@@ -4,6 +4,8 @@ import { JwtModule, type JwtModuleOptions } from "@nestjs/jwt";
 import { PassportModule } from "@nestjs/passport";
 
 import { type AppConfig, APP_CONFIG } from "../config/app-config.schema";
+import { EmailOtpService } from "./email-otp.service";
+import { EMAIL_SENDER, LogEmailSender, SmtpEmailSender } from "./email-sender";
 import { GoogleOAuthService } from "./google-oauth.service";
 import { JwtStrategy } from "./jwt.strategy";
 
@@ -29,7 +31,23 @@ import { JwtStrategy } from "./jwt.strategy";
     }),
     AccountModule,
   ],
-  providers: [JwtStrategy, GoogleOAuthService],
-  exports: [JwtModule, PassportModule, AccountModule, GoogleOAuthService],
+  providers: [
+    JwtStrategy,
+    GoogleOAuthService,
+    EmailOtpService,
+    {
+      provide: EMAIL_SENDER,
+      inject: [APP_CONFIG],
+      useFactory: (config: AppConfig) =>
+        config.email ? new SmtpEmailSender(config.email) : new LogEmailSender(),
+    },
+  ],
+  exports: [
+    JwtModule,
+    PassportModule,
+    AccountModule,
+    GoogleOAuthService,
+    EmailOtpService,
+  ],
 })
 export class AuthModule {}

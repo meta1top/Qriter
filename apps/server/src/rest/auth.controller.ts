@@ -4,9 +4,11 @@ import {
   AccountErrorCode,
   AccountIdentityService,
   AuthResponseDto,
+  EmailLoginDto,
   GoogleCodeDto,
   LoginDto,
   RegisterDto,
+  SendEmailCodeDto,
   UserService,
 } from "@qriter/account";
 import { SkipResponseEnvelope } from "@qriter/common";
@@ -34,6 +36,7 @@ import {
   CurrentUser,
   type CurrentUserPayload,
 } from "../auth/current-user.decorator";
+import { EmailOtpService } from "../auth/email-otp.service";
 import { GoogleOAuthService } from "../auth/google-oauth.service";
 import { Public } from "../auth/public.decorator";
 
@@ -49,6 +52,7 @@ export class AuthController {
     private readonly jwt: JwtService,
     private readonly identities: AccountIdentityService,
     private readonly googleOAuth: GoogleOAuthService,
+    private readonly emailOtp: EmailOtpService,
   ) {}
 
   @Public()
@@ -81,6 +85,37 @@ export class AuthController {
   async login(@Body() dto: LoginDto): Promise<AuthResponse> {
     const user = await this.users.validateCredentials(dto);
     return this.signResponse(user);
+  }
+
+  @Public()
+  // 限流：同 IP 1 分钟最多 5 次发码请求
+  @Throttle({ default: { limit: 5, ttl: 60_000 } })
+  @ApiOperation({ summary: "发送邮箱登录验证码" })
+  @ApiBody({ type: SendEmailCodeDto })
+  @ApiOkResponse({ description: "已发送（不泄露邮箱是否注册）" })
+  @Post("email/code")
+  @HttpCode(200)
+  async sendEmailCode(@Body() dto: SendEmailCodeDto): Promise<{ ok: true }> {
+    await this.emailOtp.sendCode(dto.email);
+    return { ok: true };
+  }
+
+  @Public()
+  @Throttle({ default: { limit: 10, ttl: 60_000 } })
+  @ApiOperation({ summary: "邮箱验证码登录（免密 find-or-create）" })
+  @ApiBody({ type: EmailLoginDto })
+  @ApiOkResponse({
+    description: "登录成功，data 为 accessToken + 账号档案",
+    type: AuthResponseDto,
+  })
+  @Post("email/login")
+  @HttpCode(200)
+  async emailLogin(@Body() dto: EmailLoginDto): Promise<AuthResponse> {
+    const account = await this.emailOtp.verifyAndFindOrCreate(
+      dto.email,
+      dto.code,
+    );
+    return this.signResponse(account);
   }
 
   @Public()
