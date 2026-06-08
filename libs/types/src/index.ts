@@ -3,12 +3,16 @@ export {
   AccountSchema,
   type AuthResponse,
   AuthResponseSchema,
+  type EmailLoginInput,
+  EmailLoginSchema,
   type GoogleCodeInput,
   GoogleCodeSchema,
   type LoginInput,
   LoginSchema,
   type RegisterInput,
   RegisterSchema,
+  type SendEmailCodeInput,
+  SendEmailCodeSchema,
 } from "./account/account.schema";
 export {
   AGENT_WS_EVENTS,

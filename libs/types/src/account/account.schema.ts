@@ -28,6 +28,27 @@ export const LoginSchema = z.object({
 
 export type LoginInput = z.infer<typeof LoginSchema>;
 
+/** 发送邮箱验证码入参。 */
+export const SendEmailCodeSchema = z.object({
+  email: z
+    .string()
+    .email({ message: "validation.invalidEmail" })
+    .max(255, { message: "validation.stringTooLong" }),
+});
+
+export type SendEmailCodeInput = z.infer<typeof SendEmailCodeSchema>;
+
+/** 邮箱验证码登录入参（6 位数字码）。 */
+export const EmailLoginSchema = z.object({
+  email: z
+    .string()
+    .email({ message: "validation.invalidEmail" })
+    .max(255, { message: "validation.stringTooLong" }),
+  code: z.string().regex(/^\d{6}$/, { message: "validation.invalidCode" }),
+});
+
+export type EmailLoginInput = z.infer<typeof EmailLoginSchema>;
+
 /**
  * 账号公开档案 —— 返回给前端的安全字段子集（不含 passwordHash 等敏感列）。
  */
