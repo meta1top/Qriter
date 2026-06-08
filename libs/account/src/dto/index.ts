@@ -2,12 +2,16 @@ import { createI18nZodDto } from "@qriter/shared";
 import {
   AccountSchema,
   AuthResponseSchema,
+  type EmailLoginInput,
+  EmailLoginSchema,
   type GoogleCodeInput,
   GoogleCodeSchema,
   type LoginInput,
   LoginSchema,
   type RegisterInput,
   RegisterSchema,
+  type SendEmailCodeInput,
+  SendEmailCodeSchema,
 } from "@qriter/types";
 
 /**
@@ -41,3 +45,11 @@ export interface GoogleCodeDto extends GoogleCodeInput {}
 
 /** 账号公开档案 DTO —— 仅供 Swagger 声明 @ApiOkResponse 的 type。 */
 export class AccountDto extends createI18nZodDto(AccountSchema) {}
+
+// biome-ignore lint/suspicious/noUnsafeDeclarationMerging: intentional class+interface merge to expose zod-inferred fields
+export class SendEmailCodeDto extends createI18nZodDto(SendEmailCodeSchema) {}
+export interface SendEmailCodeDto extends SendEmailCodeInput {}
+
+// biome-ignore lint/suspicious/noUnsafeDeclarationMerging: intentional class+interface merge to expose zod-inferred fields
+export class EmailLoginDto extends createI18nZodDto(EmailLoginSchema) {}
+export interface EmailLoginDto extends EmailLoginInput {}
