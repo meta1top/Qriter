@@ -84,6 +84,7 @@ export class GitHubOAuthService {
           }),
         },
       );
+      if (!tokenRes.ok) throw new Error(`token http ${tokenRes.status}`);
       const tokenJson = (await tokenRes.json()) as { access_token?: string };
       const token = tokenJson.access_token;
       if (!token) throw new Error("no access_token");
@@ -94,6 +95,7 @@ export class GitHubOAuthService {
         accept: "application/vnd.github+json",
       };
       const userRes = await fetch("https://api.github.com/user", { headers });
+      if (!userRes.ok) throw new Error(`user http ${userRes.status}`);
       const user = (await userRes.json()) as {
         id?: number;
         login?: string;
@@ -104,6 +106,7 @@ export class GitHubOAuthService {
       const emailsRes = await fetch("https://api.github.com/user/emails", {
         headers,
       });
+      if (!emailsRes.ok) throw new Error(`emails http ${emailsRes.status}`);
       const emails = (await emailsRes.json()) as Array<{
         email: string;
         primary: boolean;
