@@ -1,4 +1,4 @@
-import { TooltipProvider } from "@qriter/design";
+import { Toaster, TooltipProvider } from "@qriter/design";
 import { themeScript } from "@qriter/web-common";
 import type { Metadata } from "next";
 import { IntlProvider } from "@/components/intl-provider";
@@ -29,6 +29,8 @@ export default function RootLayout({
           <TooltipProvider>
             <Providers>{children}</Providers>
           </TooltipProvider>
+          {/* 全局 toast 出口：挂在根布局，(auth) 与 (app) 两组都能弹 */}
+          <Toaster />
         </IntlProvider>
       </body>
     </html>
