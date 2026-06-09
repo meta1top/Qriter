@@ -140,7 +140,7 @@ export class AuthController {
   async googleCallback(@Body() dto: OAuthCodeDto): Promise<AuthResponse> {
     this.googleOAuth.verifyState(dto.state);
     const profile = await this.googleOAuth.exchangeCode(dto.code);
-    const account = await this.identities.findOrCreateByGoogle({
+    const account = await this.identities.findOrCreateBySocial({
       provider: "google",
       sub: profile.sub,
       email: profile.email,

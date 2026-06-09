@@ -87,7 +87,7 @@ export class UserService {
 
   /**
    * 创建一个社交登录账号（无密码）。仅单表 insert，无需 @Transactional。
-   * 由 AccountIdentityService.findOrCreateByGoogle 在其事务上下文内调用。
+   * 由 AccountIdentityService.findOrCreateBySocial 在其事务上下文内调用。
    */
   async createSocialAccount(input: {
     email: string;

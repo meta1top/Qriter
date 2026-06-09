@@ -11,7 +11,7 @@ import { UserService } from "./user.service";
 
 /** 由 OAuth 层归一化后的社交身份档案（provider 无关形状）。 */
 export interface SocialProfile {
-  provider: "google";
+  provider: "google" | "github";
   /** provider 稳定用户 id（Google sub）。 */
   sub: string;
   email: string | null;
@@ -43,13 +43,13 @@ export class AccountIdentityService {
   }
 
   /**
-   * 按 Google 身份找或建账号。跨两表写 → @Transactional（事务经 ALS 传播到 UserService）。
+   * 按社交身份（Google / GitHub）找或建账号。跨两表写 → @Transactional（事务经 ALS 传播到 UserService）。
    * - 命中既有身份 → 返回其账号；
    * - 否则按邮箱找：命中且 email_verified=true → 关联；命中但未验证 → 抛 GOOGLE_EMAIL_UNVERIFIED；
    * - 邮箱无账号 → 建无密码账号 + 落身份。
    */
   @Transactional()
-  async findOrCreateByGoogle(profile: SocialProfile): Promise<Account> {
+  async findOrCreateBySocial(profile: SocialProfile): Promise<Account> {
     const existing = await this.findByProviderAccount(
       profile.provider,
       profile.sub,
