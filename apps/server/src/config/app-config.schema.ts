@@ -65,8 +65,18 @@ export const GoogleOAuthConfigSchema = z.object({
   scopes: z.array(z.string()).default(["openid", "email", "profile"]),
 });
 
+/** GitHub OAuth 配置（可选）。未配置则 GitHub 登录端点抛 GITHUB_OAUTH_FAILED。 */
+export const GithubOAuthConfigSchema = z.object({
+  clientId: z.string(),
+  clientSecret: z.string(),
+  /** = 前端回调页地址，如 http://localhost:3001/auth/github。 */
+  redirectUri: z.string().url(),
+  scopes: z.array(z.string()).default(["read:user", "user:email"]),
+});
+
 export const OAuthConfigSchema = z.object({
-  google: GoogleOAuthConfigSchema,
+  google: GoogleOAuthConfigSchema.optional(),
+  github: GithubOAuthConfigSchema.optional(),
 });
 
 /**
@@ -111,6 +121,7 @@ export type JwtConfig = z.infer<typeof JwtConfigSchema>;
 export type RedisConfig = z.infer<typeof RedisConfigSchema>;
 export type LlmConfig = z.infer<typeof LlmConfigSchema>;
 export type GoogleOAuthConfig = z.infer<typeof GoogleOAuthConfigSchema>;
+export type GithubOAuthConfig = z.infer<typeof GithubOAuthConfigSchema>;
 export type EmailConfig = z.infer<typeof EmailConfigSchema>;
 
 /**
