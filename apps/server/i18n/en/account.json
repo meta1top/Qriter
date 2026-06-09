@@ -7,5 +7,8 @@
   "googleStateInvalid": "Sign-in request expired or invalid, please try again",
   "emailCodeCooldown": "Verification code requested too frequently, please try later",
   "emailCodeInvalid": "Verification code is incorrect or expired",
-  "emailCodeTooManyAttempts": "Too many attempts, please request a new code"
+  "emailCodeTooManyAttempts": "Too many attempts, please request a new code",
+  "githubOauthFailed": "GitHub sign-in failed, please try again",
+  "githubStateInvalid": "GitHub sign-in verification failed, please try again",
+  "githubNoVerifiedEmail": "Your GitHub has no verified primary email; please verify it on GitHub or sign in another way"
 }

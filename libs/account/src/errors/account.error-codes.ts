@@ -76,4 +76,25 @@ export const AccountErrorCode = defineErrorCode({
     message: "account.emailCodeTooManyAttempts",
     httpStatus: 429,
   },
+
+  /** GitHub 换 code / 取用户失败（或 oauth.github 未配置）。 */
+  GITHUB_OAUTH_FAILED: {
+    code: 1009,
+    message: "account.githubOauthFailed",
+    httpStatus: 401,
+  },
+
+  /** GitHub OAuth state 验签失败（过期 / 篡改 / 标记不符）。 */
+  GITHUB_STATE_INVALID: {
+    code: 1010,
+    message: "account.githubStateInvalid",
+    httpStatus: 400,
+  },
+
+  /** GitHub 账号无「主 + 已验证」邮箱，无法登录。 */
+  GITHUB_NO_VERIFIED_EMAIL: {
+    code: 1011,
+    message: "account.githubNoVerifiedEmail",
+    httpStatus: 409,
+  },
 });

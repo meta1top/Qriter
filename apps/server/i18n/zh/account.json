@@ -7,5 +7,8 @@
   "googleStateInvalid": "登录请求已过期或无效，请重试",
   "emailCodeCooldown": "验证码发送过于频繁，请稍后再试",
   "emailCodeInvalid": "验证码错误或已过期",
-  "emailCodeTooManyAttempts": "验证码尝试次数过多，请重新获取"
+  "emailCodeTooManyAttempts": "验证码尝试次数过多，请重新获取",
+  "githubOauthFailed": "GitHub 登录失败，请重试",
+  "githubStateInvalid": "GitHub 登录校验失败，请重试",
+  "githubNoVerifiedEmail": "你的 GitHub 没有已验证的主邮箱，请先在 GitHub 验证邮箱或改用其他方式登录"
 }
