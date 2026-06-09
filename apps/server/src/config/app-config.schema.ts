@@ -70,18 +70,19 @@ export const OAuthConfigSchema = z.object({
 });
 
 /**
- * 邮件发送配置（可选）—— 阿里云邮件推送 DirectMail 的 SMTP。
+ * 邮件发送配置（可选）—— 阿里云邮件推送 DirectMail 的 API（SingleSendMail）。
  * 未配置 → 验证码走 LogEmailSender 日志兜底（本地开发用）。
  */
 export const EmailConfigSchema = z.object({
-  host: z.string().default("smtpdm.aliyun.com"),
-  port: z.coerce.number().int().min(1).max(65535).default(465),
-  secure: z.boolean().default(true),
-  /** 发信地址（DirectMail 控制台创建的发信地址）。 */
-  user: z.string(),
-  /** SMTP 密码（DirectMail 控制台为发信地址设置）。 */
-  pass: z.string(),
-  /** From 头，可含显示名，如 "Qriter <no-reply@mail.example.com>"；默认取 user。 */
+  /** DirectMail API endpoint，如 dm.aliyuncs.com（或区域化 dm.<region>.aliyuncs.com）。 */
+  endpoint: z.string().default("dm.aliyuncs.com"),
+  /** 发信地址（DirectMail 控制台创建的发信地址，作 SingleSendMail 的 AccountName）。 */
+  accountName: z.string(),
+  /** 阿里云 AccessKey ID。 */
+  accessKeyId: z.string(),
+  /** 阿里云 AccessKey Secret。 */
+  accessKeySecret: z.string(),
+  /** 发信人显示名（FromAlias，可选）。 */
   from: z.string().optional(),
 });
 

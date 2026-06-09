@@ -12,6 +12,9 @@
     "migration:archive": "tsx ../../scripts/archive-migrations.ts ."
   },
   "dependencies": {
+    "@alicloud/dm20151123": "^1.10.0",
+    "@alicloud/openapi-client": "^0.4.15",
+    "@alicloud/tea-util": "^1.4.11",
     "@nest-lab/throttler-storage-redis": "^1.2.0",
     "@nestjs/common": "^11",
     "@nestjs/core": "^11",
@@ -38,7 +41,6 @@
     "nanoid": "^5",
     "nestjs-i18n": "^10.5.1",
     "nestjs-zod": "^4",
-    "nodemailer": "^8.0.10",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "pg": "^8.20.0",
@@ -53,7 +55,6 @@
     "@nestjs/cli": "^11",
     "@types/bcrypt": "^6.0.0",
     "@types/node": "^22",
-    "@types/nodemailer": "^8.0.0",
     "@types/passport-jwt": "^4.0.1",
     "socket.io-client": "^4"
   }

@@ -5,7 +5,11 @@ import { PassportModule } from "@nestjs/passport";
 
 import { type AppConfig, APP_CONFIG } from "../config/app-config.schema";
 import { EmailOtpService } from "./email-otp.service";
-import { EMAIL_SENDER, LogEmailSender, SmtpEmailSender } from "./email-sender";
+import {
+  DirectMailEmailSender,
+  EMAIL_SENDER,
+  LogEmailSender,
+} from "./email-sender";
 import { GoogleOAuthService } from "./google-oauth.service";
 import { JwtStrategy } from "./jwt.strategy";
 
@@ -39,7 +43,9 @@ import { JwtStrategy } from "./jwt.strategy";
       provide: EMAIL_SENDER,
       inject: [APP_CONFIG],
       useFactory: (config: AppConfig) =>
-        config.email ? new SmtpEmailSender(config.email) : new LogEmailSender(),
+        config.email
+          ? new DirectMailEmailSender(config.email)
+          : new LogEmailSender(),
     },
   ],
   exports: [
