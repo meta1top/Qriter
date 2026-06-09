@@ -10,6 +10,7 @@ import {
   EMAIL_SENDER,
   LogEmailSender,
 } from "./email-sender";
+import { GitHubOAuthService } from "./github-oauth.service";
 import { GoogleOAuthService } from "./google-oauth.service";
 import { JwtStrategy } from "./jwt.strategy";
 
@@ -38,6 +39,7 @@ import { JwtStrategy } from "./jwt.strategy";
   providers: [
     JwtStrategy,
     GoogleOAuthService,
+    GitHubOAuthService,
     EmailOtpService,
     {
       provide: EMAIL_SENDER,
@@ -53,6 +55,7 @@ import { JwtStrategy } from "./jwt.strategy";
     PassportModule,
     AccountModule,
     GoogleOAuthService,
+    GitHubOAuthService,
     EmailOtpService,
   ],
 })

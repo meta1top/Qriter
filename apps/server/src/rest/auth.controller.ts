@@ -37,6 +37,7 @@ import {
   type CurrentUserPayload,
 } from "../auth/current-user.decorator";
 import { EmailOtpService } from "../auth/email-otp.service";
+import { GitHubOAuthService } from "../auth/github-oauth.service";
 import { GoogleOAuthService } from "../auth/google-oauth.service";
 import { Public } from "../auth/public.decorator";
 
@@ -52,6 +53,7 @@ export class AuthController {
     private readonly jwt: JwtService,
     private readonly identities: AccountIdentityService,
     private readonly googleOAuth: GoogleOAuthService,
+    private readonly githubOAuth: GitHubOAuthService,
     private readonly emailOtp: EmailOtpService,
   ) {}
 
@@ -142,6 +144,38 @@ export class AuthController {
     const profile = await this.googleOAuth.exchangeCode(dto.code);
     const account = await this.identities.findOrCreateBySocial({
       provider: "google",
+      sub: profile.sub,
+      email: profile.email,
+      emailVerified: profile.emailVerified,
+      name: profile.name,
+    });
+    return this.signResponse(account);
+  }
+
+  @Public()
+  @SkipResponseEnvelope()
+  @ApiOperation({ summary: "重定向到 GitHub 同意页" })
+  @Get("github")
+  @Redirect()
+  githubStart(): { url: string } {
+    return { url: this.githubOAuth.buildConsentUrl() };
+  }
+
+  @Public()
+  @Throttle({ default: { limit: 10, ttl: 60_000 } })
+  @ApiOperation({ summary: "用 GitHub 授权码换取 JWT" })
+  @ApiBody({ type: OAuthCodeDto })
+  @ApiOkResponse({
+    description: "登录成功，data 为 accessToken + 档案",
+    type: AuthResponseDto,
+  })
+  @Post("github")
+  @HttpCode(200)
+  async githubCallback(@Body() dto: OAuthCodeDto): Promise<AuthResponse> {
+    this.githubOAuth.verifyState(dto.state);
+    const profile = await this.githubOAuth.exchangeCode(dto.code);
+    const account = await this.identities.findOrCreateBySocial({
+      provider: "github",
       sub: profile.sub,
       email: profile.email,
       emailVerified: profile.emailVerified,
