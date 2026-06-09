@@ -23,6 +23,7 @@ peerDependencyRules:
     "reflect-metadata": "*"
 
 allowBuilds:
+  '@alicloud/openapi-core': true
   '@nestjs/core': true
   '@parcel/watcher': true
   '@scarf/scarf': true
