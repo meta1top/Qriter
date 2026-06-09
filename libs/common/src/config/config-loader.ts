@@ -3,6 +3,7 @@ import { config as loadDotenv } from "dotenv";
 import { z, type ZodType } from "zod";
 import { readNacosBootstrap } from "./nacos-bootstrap.schema";
 import { loadNacosConfig } from "./nacos-source";
+import { normalizeKeys } from "./normalize-keys";
 import { loadYamlConfig } from "./yaml-source";
 
 export interface LoadAppConfigOptions {
@@ -58,8 +59,11 @@ export async function loadAppConfig<S extends ZodType>(
     ? await loadNacosConfig(bootstrap)
     : loadYamlConfig(yamlFiles.map((f) => path.resolve(cwd, f)));
 
-  // 3. schema 校验 → 强类型
-  const parsed = schema.safeParse(nested);
+  // 3. 归一化 key（kebab-case → camelCase），让 Nacos / YAML 可写 access-key-id 等
+  const normalized = normalizeKeys(nested);
+
+  // 4. schema 校验 → 强类型
+  const parsed = schema.safeParse(normalized);
   if (!parsed.success) {
     const issues = parsed.error.issues
       .map((i) => `  - ${i.path.join(".") || "(root)"}: ${i.message}`)
