@@ -154,7 +154,9 @@ export default function LoginPage() {
           type="button"
           aria-label={t("loginWithGithub")}
           title={t("loginWithGithub")}
-          onClick={comingSoon}
+          onClick={() => {
+            window.location.href = "/api/auth/github";
+          }}
           className="flex size-11 items-center justify-center rounded-lg border border-border text-foreground transition hover:bg-primary/[0.07]"
         >
           <GithubIcon className="size-5" />

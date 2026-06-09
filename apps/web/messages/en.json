@@ -21,6 +21,7 @@
     "submit": "Sign in",
     "submitting": "Signing in…",
     "loginFailed": "Login failed, please try again",
+    "githubLoginFailed": "GitHub sign-in failed, please try again",
     "signInWithGoogle": "Sign in with Google",
     "backToLogin": "Back to sign in",
     "brandSlogan": "Before you write, talk it over with your agent.",
