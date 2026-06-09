@@ -28,6 +28,9 @@ import request from "supertest";
 import { JwtAuthGuard } from "../../src/auth/jwt-auth.guard";
 import { JwtStrategy } from "../../src/auth/jwt.strategy";
 import { GoogleOAuthService } from "../../src/auth/google-oauth.service";
+import { GitHubOAuthService } from "../../src/auth/github-oauth.service";
+import { EmailOtpService } from "../../src/auth/email-otp.service";
+import { EMAIL_SENDER, LogEmailSender } from "../../src/auth/email-sender";
 import { type AppConfig, APP_CONFIG } from "../../src/config/app-config.schema";
 import { AuthController } from "../../src/rest/auth.controller";
 import {
@@ -123,6 +126,9 @@ describe("server google-auth e2e", () => {
         JwtStrategy,
         { provide: APP_GUARD, useClass: JwtAuthGuard },
         GoogleOAuthService,
+        GitHubOAuthService,
+        EmailOtpService,
+        { provide: EMAIL_SENDER, useClass: LogEmailSender },
       ],
     })
       .overrideProvider(GoogleOAuthService)
