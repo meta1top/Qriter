@@ -5,7 +5,7 @@ import {
   AccountIdentityService,
   AuthResponseDto,
   EmailLoginDto,
-  GoogleCodeDto,
+  OAuthCodeDto,
   LoginDto,
   RegisterDto,
   SendEmailCodeDto,
@@ -130,14 +130,14 @@ export class AuthController {
   @Public()
   @Throttle({ default: { limit: 10, ttl: 60_000 } })
   @ApiOperation({ summary: "用 Google 授权码换取 JWT" })
-  @ApiBody({ type: GoogleCodeDto })
+  @ApiBody({ type: OAuthCodeDto })
   @ApiOkResponse({
     description: "登录成功，data 为 accessToken + 档案",
     type: AuthResponseDto,
   })
   @Post("google")
   @HttpCode(200)
-  async googleCallback(@Body() dto: GoogleCodeDto): Promise<AuthResponse> {
+  async googleCallback(@Body() dto: OAuthCodeDto): Promise<AuthResponse> {
     this.googleOAuth.verifyState(dto.state);
     const profile = await this.googleOAuth.exchangeCode(dto.code);
     const account = await this.identities.findOrCreateByGoogle({

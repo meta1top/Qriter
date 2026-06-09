@@ -4,8 +4,8 @@ import {
   AuthResponseSchema,
   type EmailLoginInput,
   EmailLoginSchema,
-  type GoogleCodeInput,
-  GoogleCodeSchema,
+  type OAuthCodeInput,
+  OAuthCodeSchema,
   type LoginInput,
   LoginSchema,
   type RegisterInput,
@@ -40,8 +40,8 @@ export interface LoginDto extends LoginInput {}
 export class AuthResponseDto extends createI18nZodDto(AuthResponseSchema) {}
 
 // biome-ignore lint/suspicious/noUnsafeDeclarationMerging: intentional class+interface merge to expose zod-inferred fields
-export class GoogleCodeDto extends createI18nZodDto(GoogleCodeSchema) {}
-export interface GoogleCodeDto extends GoogleCodeInput {}
+export class OAuthCodeDto extends createI18nZodDto(OAuthCodeSchema) {}
+export interface OAuthCodeDto extends OAuthCodeInput {}
 
 /** 账号公开档案 DTO —— 仅供 Swagger 声明 @ApiOkResponse 的 type。 */
 export class AccountDto extends createI18nZodDto(AccountSchema) {}
